@@ -18,7 +18,7 @@ class MyApp : public cinder::app::App {
   void keyDown(cinder::app::KeyEvent) override;
     cinder::gl::Texture2dRef texture;
     void DrawBoard();
-
+    void PrintBoard();
 };
 
 }  // namespace myapp

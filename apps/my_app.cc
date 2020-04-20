@@ -1,6 +1,7 @@
 // Copyright (c) 2020 [Your Name]. All rights reserved.
 
 #include "my_app.h"
+#include "../src/board.h"
 
 
 #include <cinder/app/App.h>
@@ -17,6 +18,8 @@
 #include <chrono>
 #include <cmath>
 #include <string>
+#include <iostream>
+#include<string>
 
 
 
@@ -100,6 +103,34 @@ void MyApp::DrawBoard() {
         size_t row = 0;
         PrintText("~Battleship~", color, size, center);
         PrintBackground(color, size);
+        PrintBoard();
+}
+
+void MyApp::PrintBoard() {
+    int width = 3;
+    int height = 4;
+    Board* board = new Board(width, height);
+    const cinder::vec2 center = getWindowCenter();
+    const cinder::ivec2 size = {50, 50};
+    const Color color = Color::white();
+    int counter = 270.0f;
+    for (int i{0}; i < width; i++) {
+        string str= std::to_string(i);
+        PrintText(str, color, size, {cinder::app::getWindowWidth() /2 - counter, cinder::app::getWindowHeight() / 2-290.0f});
+        counter = counter - 30;
+    }
+    int horizontal_counters = 270.0f;
+    int vertical_counters = 250.0f;
+    for (int row{0}; row < height; row++) {
+        string str= std::to_string(row);
+        PrintText(str, color, size, {cinder::app::getWindowWidth() /2 - horizontal_counters - 40, cinder::app::getWindowHeight() / 2-vertical_counters});
+        for (int col{0}; col < width; col++) {
+            PrintText(board->grid[col][row], color, size, {cinder::app::getWindowWidth() /2 - horizontal_counters, cinder::app::getWindowHeight() / 2 - vertical_counters});
+            horizontal_counters = horizontal_counters - 30;
+        }
+        vertical_counters = vertical_counters - 30;
+        horizontal_counters = 270.0f;
+    }
 }
 
 }  // namespace myapp
