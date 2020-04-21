@@ -107,17 +107,17 @@ void MyApp::DrawBoard() {
 }
 
 void MyApp::PrintBoard() {
-    int width = 3;
-    int height = 4;
+    int width = 8;
+    int height = 8;
     Board* board = new Board(width, height);
     const cinder::vec2 center = getWindowCenter();
     const cinder::ivec2 size = {50, 50};
     const Color color = Color::white();
-    int counter = 270.0f;
+    int horizontal_width_numbering = 270.0f;
     for (int i{0}; i < width; i++) {
         string str= std::to_string(i);
-        PrintText(str, color, size, {cinder::app::getWindowWidth() /2 - counter, cinder::app::getWindowHeight() / 2-290.0f});
-        counter = counter - 30;
+        PrintText(str, color, size, {cinder::app::getWindowWidth() /2 - horizontal_width_numbering, cinder::app::getWindowHeight() / 2 - 290.0f});
+        horizontal_width_numbering = horizontal_width_numbering - 30;
     }
     int horizontal_counters = 270.0f;
     int vertical_counters = 250.0f;
