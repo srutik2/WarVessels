@@ -3,6 +3,7 @@
 #include "my_app.h"
 #include "../src/board.h"
 
+
 #include <cinder/app/App.h>
 #include <cinder/Text.h>
 #include <cinder/gl/draw.h>
@@ -43,6 +44,8 @@ MyApp::MyApp() { }
 void MyApp::setup() {
     //background picture
     texture = cinder::gl::Texture2d::create( loadImage(loadAsset("backg.jpg")));
+    mGif = cinder::ciAnimatedGif::create( loadAsset("something.gif"));
+
 }
 
 void MyApp::update() { }
@@ -51,6 +54,7 @@ void MyApp::draw() {
     cinder::gl::color(Color::white());
     cinder::gl::draw(texture, getWindowBounds());
     DrawBoard();
+    mGif->draw();
 }
 
 void MyApp::keyDown(KeyEvent event) { }
@@ -94,6 +98,7 @@ void PrintBackground(const C& color, const cinder::ivec2& size) {
 
 void MyApp::DrawBoard() {
         // Lazily print.
+
 
         const cinder::vec2 center = getWindowCenter();
         const cinder::ivec2 size = {500, 50};

@@ -103,14 +103,13 @@ endif()
 FetchContent_Declare(
         ciAnimatedGif
         GIT_REPOSITORY https://github.com/srutik2/ciAnimatedGif.git
-        GIT_TAG v2.2.2
 )
 
 FetchContent_GetProperties(ciAnimatedGif)
 if(NOT ciAnimatedGif_POPULATED)
     FetchContent_Populate(ciAnimatedGif)
      #This is overkill since we only need a single file. Though it is a clean solution.
-    add_library(catch2 src/board.cc src/board.h src/menu.cc src/menu.h src/player.cc src/player.h)
+#    add_library(ciAnimatedGif src/board.cc src/board.h src/menu.cc src/menu.h src/player.cc src/player.h)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 # Add more CMake libraries here ...

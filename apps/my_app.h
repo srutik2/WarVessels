@@ -5,7 +5,7 @@
 
 #include <cinder/app/App.h>
 #include <cinder/gl/texture.h>
-
+#include "ciAnimatedGif.h"
 
 namespace myapp {
 
@@ -19,6 +19,7 @@ class MyApp : public cinder::app::App {
     cinder::gl::Texture2dRef texture;
     void DrawBoard();
     void PrintBoard();
+    cinder::ciAnimatedGifRef    mGif;
 };
 
 }  // namespace myapp
