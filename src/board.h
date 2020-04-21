@@ -27,10 +27,10 @@ public:
     char Miss(int width, int height);
 
     // Returns width of board
-    int &getWidth();
+    int &GetWidth();
 
     // Returns height of board
-    int &getHeight();
+    int &GetHeight();
 
     // Coordinates system info
     int width;
@@ -41,13 +41,6 @@ public:
     const static int MAX_HEIGHT = 30;
 
     std::string grid[MAX_WIDTH][MAX_HEIGHT];
-
-private:
-
-
-    // Grid to hold printable grid
-
-
 };
 
 

@@ -16,10 +16,10 @@ class MyApp : public cinder::app::App {
   void update() override;
   void draw() override;
   void keyDown(cinder::app::KeyEvent) override;
-    cinder::gl::Texture2dRef texture;
-    void DrawBoard();
-    void PrintBoard();
-    cinder::ciAnimatedGifRef    mGif;
+  cinder::gl::Texture2dRef background;
+  void DrawBoard();
+  void PrintBoard();
+  cinder::ciAnimatedGifRef gif_example;
 };
 
 }  // namespace myapp

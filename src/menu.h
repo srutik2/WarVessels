@@ -17,8 +17,9 @@ public:
     ~Menu();
 
     // Asks player for the amount of players and creates the player objects
-    void setGameUp();
+    void SetGameUp();
 
+    //struct of points
     struct Points {
         Points(int x, int y) : x{x}, y{y} {};
 
@@ -26,8 +27,7 @@ public:
         int y;
     };
 
-
-
+    //vector of points
     std::vector<Points> points;
 
 private:
@@ -37,24 +37,26 @@ private:
     int amountOfLives;
 
     // Players for the game
-    Player *playerOne;
-    Player *playerTwo;
+    Player *user_player;
+    Player *computer_player;
 
     // Finishes game by resetting pointers
-    void finishGame();
+    void FinishGame();
 
-    // Plays through a turn for a single player game
-    void singlePlayer();
+    // Driver for the game
+    void PlayGame();
 
     // Puts ships on the computers board for each live they have
-    void placeRandomShips(Player *p);
+    void PlaceRandomShips(Player *player);
 
     // Prints name, lives and board for given player
-    void printPlayerInfo(Player *p);
+    void PrintPlayerInfo(Player *p);
 
-    void placePlayerShips(Player *p);
+    //user inputs where the ships reside
+    void PlacePlayerShips(Player *player);
 
-    int findRandomRowOrCol(int num);
+    //where the random computer ships are
+    int FindRandomRowOrCol(int num);
 };
 
 

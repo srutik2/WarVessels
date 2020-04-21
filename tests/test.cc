@@ -4,16 +4,7 @@
 
 #include <catch2/catch.hpp>
 #include <cinder/Rand.h>
-
-#include <mylibrary/example.h>
 #include "../src/player.h"
-
-
-TEST_CASE("Random sanity test", "[random]") {
-  const float random = cinder::randFloat();
-  REQUIRE(0. <= random);
-  REQUIRE(random <= 1.);
-}
 
 TEST_CASE("basic tests") {
     Player p("Player 1", 5, 5, 5);
@@ -30,8 +21,8 @@ TEST_CASE("basic tests") {
     int width = 3;
     int height = 4;
     Board* board = new Board(width, height);
-    REQUIRE(board->getWidth() == width);
-    REQUIRE(board->getHeight() == height);
+    REQUIRE(board->GetWidth() == width);
+    REQUIRE(board->GetHeight() == height);
     REQUIRE(board->Hit(width,height) == 'X');
     REQUIRE(board->Miss(width,height) == 'O');
 
@@ -44,5 +35,5 @@ TEST_CASE("basic tests") {
     REQUIRE(p.Attacked(0, 2) == 0);
     REQUIRE(p.Attacked(2, 0) == 0);
 
-    REQUIRE_NOTHROW(p.printBoard());
+    REQUIRE_NOTHROW(p.PrintBoard());
 }

@@ -32,7 +32,7 @@ public:
     int Attacked(int col, int row);
 
     // Prints board for current player
-    void printBoard();
+    void PrintBoard();
 
 private:
     // Players name
@@ -44,22 +44,16 @@ private:
     // Players personal board
     Board *grid;
 
-
-
-
 public:
     // Ship object to hold it's board position
     struct Ship {
         Ship(int col, int row) : col{col}, row{row} {};
-
         int col;
         int row;
     };
 
     // Vector of all ships this player has
     std::vector<Ship> ships;
-
-    const std::vector<Ship> &getShips() const;
 
 };
 

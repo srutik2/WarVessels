@@ -2,26 +2,15 @@
 
 #include "my_app.h"
 #include "../src/board.h"
-
-
 #include <cinder/app/App.h>
 #include <cinder/Text.h>
 #include <cinder/gl/draw.h>
 #include <cinder/gl/gl.h>
 #include <cinder/Font.h>
-#include <cinder/Text.h>
 #include <cinder/Vector.h>
-#include <cinder/gl/draw.h>
-#include <cinder/gl/gl.h>
-
 #include <algorithm>
 #include <chrono>
-#include <cmath>
 #include <string>
-#include <iostream>
-#include<string>
-
-
 
 namespace myapp {
 
@@ -35,26 +24,22 @@ using cinder::app::KeyEvent;
     using std::chrono::system_clock;
     using std::string;
     using cinder::TextBox;
-
     const char kNormalFont[] = "Arial Unicode MS";
-
 
 MyApp::MyApp() { }
 
 void MyApp::setup() {
-    //background picture
-    texture = cinder::gl::Texture2d::create( loadImage(loadAsset("backg.jpg")));
-    mGif = cinder::ciAnimatedGif::create( loadAsset("something.gif"));
-
+    background = cinder::gl::Texture2d::create(loadImage(loadAsset("backg.jpg")));
+    gif_example = cinder::ciAnimatedGif::create(loadAsset("source.gif"));
 }
 
 void MyApp::update() { }
 
 void MyApp::draw() {
     cinder::gl::color(Color::white());
-    cinder::gl::draw(texture, getWindowBounds());
+    cinder::gl::draw(background, getWindowBounds());
     DrawBoard();
-    mGif->draw();
+    gif_example->draw();
 }
 
 void MyApp::keyDown(KeyEvent event) { }
@@ -86,9 +71,12 @@ void PrintBackground(const C& color, const cinder::ivec2& size) {
                                       cinder::app::getWindowHeight()/2-350.0f,
                                       cinder::app::getWindowWidth()/2-30.0f,
                                       cinder::app::getWindowHeight()/2-30.0f ) );
+
     size_t row = 0;
-    PrintText("Computer", color, size, {cinder::app::getWindowCenter().x + (++row) * 180, cinder::app::getWindowCenter().y + (++row) * 30});
-    PrintText("User", color, size, {cinder::app::getWindowWidth() /2 - 180.0f, cinder::app::getWindowHeight() / 2-325.0f});
+    PrintText("Computer", color, size, {cinder::app::getWindowCenter().x + (++row) * 180,
+                                        cinder::app::getWindowCenter().y + (++row) * 30});
+    PrintText("User", color, size, {cinder::app::getWindowWidth() /2 - 180.0f,
+                                    cinder::app::getWindowHeight() / 2-325.0f});
 
     cinder::gl::drawStrokedRect( Rectf( cinder::app::getWindowWidth()/2+30.0f,
                                         cinder::app::getWindowHeight()/2+30.0f,
@@ -97,14 +85,10 @@ void PrintBackground(const C& color, const cinder::ivec2& size) {
 }
 
 void MyApp::DrawBoard() {
-        // Lazily print.
-
-
         const cinder::vec2 center = getWindowCenter();
         const cinder::ivec2 size = {500, 50};
         const Color color = Color::white();
 
-        size_t row = 0;
         PrintText("~Battleship~", color, size, center);
         PrintBackground(color, size);
         PrintBoard();
@@ -113,27 +97,31 @@ void MyApp::DrawBoard() {
 void MyApp::PrintBoard() {
     int width = 8;
     int height = 8;
+
     Board* board = new Board(width, height);
     const cinder::vec2 center = getWindowCenter();
     const cinder::ivec2 size = {50, 50};
     const Color color = Color::white();
-    int horizontal_width_numbering = 270.0f;
+    int horizontal_location_numbering = 270.0f;
+
     for (int i{0}; i < width; i++) {
-        string str= std::to_string(i);
-        PrintText(str, color, size, {cinder::app::getWindowWidth() /2 - horizontal_width_numbering, cinder::app::getWindowHeight() / 2 - 290.0f});
-        horizontal_width_numbering = horizontal_width_numbering - 30;
+        string str = std::to_string(i);
+        PrintText(str, color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_numbering, cinder::app::getWindowHeight() / 2 - 290.0f});
+        horizontal_location_numbering = horizontal_location_numbering - 30;
     }
-    int horizontal_counters = 270.0f;
-    int vertical_counters = 250.0f;
+
+    int horizontal_location_in_grid = 270.0f;
+    int vertical_location_in_grid = 250.0f;
+
     for (int row{0}; row < height; row++) {
         string str= std::to_string(row);
-        PrintText(str, color, size, {cinder::app::getWindowWidth() /2 - horizontal_counters - 40, cinder::app::getWindowHeight() / 2-vertical_counters});
+        PrintText(str, color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid - 40, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
         for (int col{0}; col < width; col++) {
-            PrintText(board->grid[col][row], color, size, {cinder::app::getWindowWidth() /2 - horizontal_counters, cinder::app::getWindowHeight() / 2 - vertical_counters});
-            horizontal_counters = horizontal_counters - 30;
+            PrintText(board->grid[col][row], color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
+            horizontal_location_in_grid = horizontal_location_in_grid - 30;
         }
-        vertical_counters = vertical_counters - 30;
-        horizontal_counters = 270.0f;
+        vertical_location_in_grid = vertical_location_in_grid - 30;
+        horizontal_location_in_grid = 270.0f;
     }
 }
 

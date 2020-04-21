@@ -4,25 +4,25 @@
 
 #include "board.h"
 #include <iostream>
-#include "board.h"
 
-// Constructor
+
 Board::Board(int width, int height) : width{width}, height{height} {
-    for (int i{0}; i < width; i++) {
-        for (int j{0}; j < height; j++) {
-            grid[i][j] = "~";
+    for (int col{0}; col < width; col++) {
+        for (int row{0}; row < height; row++) {
+            grid[col][row] = "~";
         }
     }
 }
 
-// Destructor
+
 Board::~Board() { }
 
-// Prints board to console
+
 void Board::Print() {
     std::cout << " ";
-    for (int i{0}; i < width; i++) {
-        std::cout << i << " ";
+
+    for (int numbering{0}; numbering < width; numbering++) {
+        std::cout << numbering << " ";
     }
     std::cout << std::endl;
 
@@ -36,24 +36,24 @@ void Board::Print() {
     std::cout << std::endl;
 }
 
-// Replaces spot on grid with an 'X'
+
 char Board::Hit(int width, int height) {
     grid[width][height] = "X";
     return 'X';
 }
 
-// Replaces spot on grid with an 'O'
+
 char Board::Miss(int width, int height) {
     grid[width][height] = "O";
     return 'O';
 }
 
-// Returns width of board
-int &Board::getWidth() {
+
+int &Board::GetWidth() {
     return width;
 }
 
-// Returns height of board
-int &Board::getHeight() {
+
+int &Board::GetHeight() {
     return height;
 }
