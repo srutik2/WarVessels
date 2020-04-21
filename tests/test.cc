@@ -32,6 +32,8 @@ TEST_CASE("basic tests") {
     Board* board = new Board(width, height);
     REQUIRE(board->getWidth() == width);
     REQUIRE(board->getHeight() == height);
+    REQUIRE(board->Hit(width,height) == 'X');
+    REQUIRE(board->Miss(width,height) == 'O');
 
     REQUIRE(p.Attacked(0, 0) == 1);
     REQUIRE(p.Attacked(1, 1) == 1);

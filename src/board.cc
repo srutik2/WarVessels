@@ -16,9 +16,7 @@ Board::Board(int width, int height) : width{width}, height{height} {
 }
 
 // Destructor
-Board::~Board() {
-
-}
+Board::~Board() { }
 
 // Prints board to console
 void Board::Print() {
@@ -39,13 +37,15 @@ void Board::Print() {
 }
 
 // Replaces spot on grid with an 'X'
-void Board::Hit(int width, int height) {
+char Board::Hit(int width, int height) {
     grid[width][height] = "X";
+    return 'X';
 }
 
 // Replaces spot on grid with an 'O'
-void Board::Miss(int width, int height) {
+char Board::Miss(int width, int height) {
     grid[width][height] = "O";
+    return 'O';
 }
 
 // Returns width of board

@@ -3,7 +3,6 @@
 #include "my_app.h"
 #include "../src/board.h"
 
-
 #include <cinder/app/App.h>
 #include <cinder/Text.h>
 #include <cinder/gl/draw.h>

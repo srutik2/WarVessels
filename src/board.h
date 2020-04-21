@@ -21,10 +21,10 @@ public:
     void Print();
 
     // Replaces spot on grid with an 'X'
-    void Hit(int width, int height);
+    char Hit(int width, int height);
 
     // Replaces spot on grid with an 'O'
-    void Miss(int width, int height);
+    char Miss(int width, int height);
 
     // Returns width of board
     int &getWidth();
