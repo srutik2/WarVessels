@@ -3,10 +3,9 @@
 #define CATCH_CONFIG_MAIN
 
 #include <catch2/catch.hpp>
-#include <cinder/Rand.h>
 #include "../src/player.h"
 
-TEST_CASE("basic tests") {
+TEST_CASE("Testing Player Class") {
     Player p("Player 1", 5, 5, 5);
     REQUIRE(p.GetName() == "Player 1");
     REQUIRE(p.GetLives() == 5);
@@ -18,14 +17,6 @@ TEST_CASE("basic tests") {
         p.AddShip(i, i);
     }
 
-    int width = 3;
-    int height = 4;
-    Board* board = new Board(width, height);
-    REQUIRE(board->GetWidth() == width);
-    REQUIRE(board->GetHeight() == height);
-    REQUIRE(board->Hit(width,height) == 'X');
-    REQUIRE(board->Miss(width,height) == 'O');
-
     REQUIRE(p.Attacked(0, 0) == 1);
     REQUIRE(p.Attacked(1, 1) == 1);
     REQUIRE(p.Attacked(-1, 0) == -1);
@@ -36,4 +27,15 @@ TEST_CASE("basic tests") {
     REQUIRE(p.Attacked(2, 0) == 0);
 
     REQUIRE_NOTHROW(p.PrintBoard());
+}
+
+TEST_CASE("Testing Board Class") {
+    int width = 3;
+    int height = 4;
+
+    Board* board = new Board(width, height);
+    REQUIRE(board->GetWidth() == width);
+    REQUIRE(board->GetHeight() == height);
+    REQUIRE(board->Hit(width,height) == 'X');
+    REQUIRE(board->Miss(width,height) == 'O');
 }

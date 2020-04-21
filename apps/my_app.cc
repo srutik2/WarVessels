@@ -24,25 +24,30 @@ using cinder::app::KeyEvent;
     using std::chrono::system_clock;
     using std::string;
     using cinder::TextBox;
-    const char kNormalFont[] = "Arial Unicode MS";
+    const char kNormalFont[] = "Papyrus";
 
 MyApp::MyApp() { }
+
 
 void MyApp::setup() {
     background = cinder::gl::Texture2d::create(loadImage(loadAsset("backg.jpg")));
     gif_example = cinder::ciAnimatedGif::create(loadAsset("source.gif"));
 }
 
+
 void MyApp::update() { }
+
 
 void MyApp::draw() {
     cinder::gl::color(Color::white());
     cinder::gl::draw(background, getWindowBounds());
     DrawBoard();
-    gif_example->draw();
+    //gif_example->draw();
 }
 
+
 void MyApp::keyDown(KeyEvent event) { }
+
 
 template <typename C>
 void PrintText(const string& text, const C& color, const cinder::ivec2& size,
@@ -64,6 +69,7 @@ void PrintText(const string& text, const C& color, const cinder::ivec2& size,
         cinder::gl::draw(texture, locp);
 }
 
+
 template <typename C>
 void PrintBackground(const C& color, const cinder::ivec2& size) {
     cinder::gl::color(color);
@@ -84,6 +90,7 @@ void PrintBackground(const C& color, const cinder::ivec2& size) {
                                         cinder::app::getWindowHeight()/2+350.0f ) );
 }
 
+
 void MyApp::DrawBoard() {
         const cinder::vec2 center = getWindowCenter();
         const cinder::ivec2 size = {500, 50};
@@ -93,6 +100,7 @@ void MyApp::DrawBoard() {
         PrintBackground(color, size);
         PrintBoard();
 }
+
 
 void MyApp::PrintBoard() {
     int width = 8;
