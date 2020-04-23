@@ -24,6 +24,7 @@ using cinder::app::KeyEvent;
     using std::chrono::system_clock;
     using std::string;
     using cinder::TextBox;
+    //change to string
     const char kNormalFont[] = "Papyrus";
 
 MyApp::MyApp() { }
@@ -31,7 +32,7 @@ MyApp::MyApp() { }
 
 void MyApp::setup() {
     background = cinder::gl::Texture2d::create(loadImage(loadAsset("backg.jpg")));
-    gif_example = cinder::ciAnimatedGif::create(loadAsset("source.gif"));
+    gif_example = cinder::ciAnimatedGif::create(loadAsset("spongebob.gif"));
 }
 
 
@@ -42,7 +43,7 @@ void MyApp::draw() {
     cinder::gl::color(Color::white());
     cinder::gl::draw(background, getWindowBounds());
     DrawBoard();
-    //gif_example->draw();
+    gif_example->draw();
 }
 
 
