@@ -93,12 +93,12 @@ if(NOT catch2_POPULATED)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 
-# Adss gflags::gflags
+# Adds gflags::gflags
 FetchContent_GetProperties(gflags)
-if(NOT gflags_POPULATED)
+if (NOT gflags_POPULATED)
     FetchContent_Populate(gflags)
     add_subdirectory(${gflags_SOURCE_DIR} ${gflags_BINARY_DIR})
-endif()
+endif ()
 
 FetchContent_Declare(
         ciAnimatedGif

@@ -6,12 +6,13 @@
 #include <iostream>
 
 
-Menu::Menu() : user_player{nullptr}, computer_player{nullptr} { }
+Menu::Menu(Player *user_player, Player *computer_player, int lives, int width, int height) :
+user_player_instance{user_player}, computer_player_instance{computer_player}, amountOfLives(lives), width(width), height(height) { }
 
 
 Menu::~Menu() { }
 
-
+/*
 void Menu::SetGameUp() {
     std::cout << "~~~You are playing Battleship!~~~" << std::endl;
 
@@ -21,19 +22,18 @@ void Menu::SetGameUp() {
     std::cin >> width;
     std::cout << "Board height: ";
     std::cin >> height;
-    std::string playerName;
     std::cout << "Player one name: ";
     std::cin >> playerName;
 
-    user_player = new Player(playerName, amountOfLives, width, height);
-    computer_player = new Player("Computer", amountOfLives, width, height);
+    user_player_instance = new Player(playerName, amountOfLives, width, height);
+    computer_player_instance = new Player("Computer", amountOfLives, width, height);
     PlayGame();
 }
 
-
+*/
 void Menu::FinishGame() {
-    delete user_player;
-    delete computer_player;
+    delete user_player_instance;
+    delete computer_player_instance;
 }
 
 
@@ -43,34 +43,34 @@ void Menu::PlayGame() {
     std::cout << "Example input \"0 3\" will shoot at "
                  "column 0, row 3" << std::endl << std::endl;
 
-    PlacePlayerShips(user_player);
-    PlaceRandomShips(computer_player);
-    PrintPlayerInfo(computer_player);
+    PlacePlayerShips(user_player_instance);
+    PlaceRandomShips(computer_player_instance);
+    PrintPlayerInfo(computer_player_instance);
 
-    while (computer_player->GetLives() > 0 && user_player->GetLives() > 0) {
+    while (computer_player_instance->GetLives() > 0 && user_player_instance->GetLives() > 0) {
         std::cout << "Shoot at: ";
         int user_col_shot, user_row_shot;
         std::cin >> user_col_shot >> user_row_shot;
         points.emplace_back(user_col_shot, user_row_shot);
-        computer_player->Attacked(user_col_shot, user_row_shot);
+        computer_player_instance->Attacked(user_col_shot, user_row_shot);
 
         int computer_col_shot = 0;
         int computer_row_shot = 1;
         computer_col_shot = FindRandomRowOrCol(computer_col_shot);
         computer_row_shot = FindRandomRowOrCol(computer_row_shot);
-        user_player->Attacked(computer_col_shot, computer_row_shot);
+        user_player_instance->Attacked(computer_col_shot, computer_row_shot);
 
         std::cout << "opponents's shots " << "colums: " << computer_col_shot << " rows: " << computer_row_shot << std::endl;
-        PrintPlayerInfo(computer_player);
+        PrintPlayerInfo(computer_player_instance);
         std::cout << "Your battle grid: " << std::endl;
-        PrintPlayerInfo(user_player);
+        PrintPlayerInfo(user_player_instance);
     }
 
-    if (computer_player->GetLives() == 0 && user_player->GetLives() == 0) {
+    if (computer_player_instance->GetLives() == 0 && user_player_instance->GetLives() == 0) {
         std::cout << "This was a tie!!!" << std::endl;
-    } else if (user_player->GetLives() == 0) {
+    } else if (user_player_instance->GetLives() == 0) {
         std::cout << "You lose!!!" << std::endl;
-    } else if (computer_player->GetLives() == 0) {
+    } else if (computer_player_instance->GetLives() == 0) {
         std::cout << "You win!!!" << std::endl;
     }
 
@@ -108,7 +108,7 @@ void Menu::PlacePlayerShips(Player *player) {
             ship_placement_count = ship_placement_count - 1;
             continue;
         }
-        user_player->AddShip(col, row);
+        user_player_instance->AddShip(col, row);
         std::cout << "you have placed a ship here: col - " << col << " row - " << row << std::endl;
 
     }

@@ -31,6 +31,7 @@ MyApp::MyApp() { }
 
 
 void MyApp::setup() {
+
     background = cinder::gl::Texture2d::create(loadImage(loadAsset("backg.jpg")));
     gif_example = cinder::ciAnimatedGif::create(loadAsset("spongebob.gif"));
 }

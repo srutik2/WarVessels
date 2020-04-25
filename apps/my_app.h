@@ -6,6 +6,7 @@
 #include <cinder/app/App.h>
 #include <cinder/gl/texture.h>
 #include "ciAnimatedGif.h"
+#include "../src/player.h"
 
 namespace myapp {
 

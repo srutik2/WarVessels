@@ -11,7 +11,7 @@
 class Menu {
 public:
     // Constructor
-    Menu();
+    Menu(Player* user_player, Player* computer_player, int lives, int width, int height);
 
     // Destructor
     ~Menu();
@@ -27,24 +27,26 @@ public:
         int y;
     };
 
+    std::string playerName;
     //vector of points
     std::vector<Points> points;
-
-private:
-    // Board information
     int width;
     int height;
     int amountOfLives;
 
+// Driver for the game
+void PlayGame();
+
+private:
+    // Board information
+
+
     // Players for the game
-    Player *user_player;
-    Player *computer_player;
+    Player *user_player_instance;
+    Player *computer_player_instance;
 
     // Finishes game by resetting pointers
     void FinishGame();
-
-    // Driver for the game
-    void PlayGame();
 
     // Puts ships on the computers board for each live they have
     void PlaceRandomShips(Player *player);
