@@ -37,8 +37,8 @@ public:
     int height;
 
     // Max grid info
-    const static int MAX_WIDTH = 30;
-    const static int MAX_HEIGHT = 30;
+    const static int MAX_WIDTH = 8;
+    const static int MAX_HEIGHT = 8;
 
     std::string grid[MAX_WIDTH][MAX_HEIGHT];
 };

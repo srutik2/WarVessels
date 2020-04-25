@@ -43,7 +43,7 @@ void MyApp::draw() {
     cinder::gl::color(Color::white());
     cinder::gl::draw(background, getWindowBounds());
     DrawBoard();
-    gif_example->draw();
+    //gif_example->draw();
 }
 
 
@@ -70,6 +70,110 @@ void PrintText(const string& text, const C& color, const cinder::ivec2& size,
         cinder::gl::draw(texture, locp);
 }
 
+void MyApp::mouseDown( cinder::app::MouseEvent event ) {
+    if (event.isRight() && event.isShiftDown()) {
+        //console() << "Special thing happened!" << std::endl;
+        auto mMouseLoc = event.getPos();
+        mouse_x_ = mMouseLoc.x;
+        mouse_y_ = mMouseLoc.y;
+        std::cout << "Mouse location: " << mMouseLoc << std::endl;
+        GatheringXLocation();
+        std::cout << "X quantity " << x << std::endl;
+        GatheringYLocation();
+        std::cout << "Y quantity " << y << std::endl;
+    }
+
+}
+
+void MyApp::GatheringYLocation() {
+    for (int i = 130; i <= 365; i++) {
+        for (int j = 130; j < 145; j++) {
+            if (j == mouse_y_) {
+                y = 0;
+            }
+        }
+        for (int j = 160; j <= 175; j++) {
+            if (j == mouse_y_) {
+                y = 1;
+            }
+        }
+        for (int j = 190; j <= 205; j++) {
+            if (j == mouse_y_) {
+                y = 2;
+            }
+        }
+        for (int j = 220; j <= 235; j++) {
+            if (j == mouse_y_) {
+                y = 3;
+            }
+        }
+        for (int j = 250; j <= 265; j++) {
+            if (j == mouse_y_) {
+                y = 4;
+            }
+        }
+        for (int j = 280; j <= 295; j++) {
+            if (j == mouse_y_) {
+                y = 5;
+            }
+        }
+        for (int j = 310; j <= 325; j++) {
+            if (j == mouse_y_) {
+                y = 6;
+            }
+        }
+        for (int j = 340; j <= 365; j++) {
+            if (j == mouse_y_) {
+                y = 7;
+            }
+        }
+    }
+}
+
+void MyApp::GatheringXLocation() {
+    for (int i = 115; i <= 310; i++) {
+        for (int j = 115; j <=145; j++) {
+            if (j == mouse_x_) {
+                x = 0;
+            }
+        }
+        for (int j = 146; j <= 175; j++) {
+            if (j == mouse_x_) {
+                x = 1;
+            }
+        }
+        for (int j = 176; j <= 205; j++) {
+            if (j == mouse_x_) {
+                x = 2;
+            }
+        }
+        for (int j = 206; j <= 235; j++) {
+            if (j == mouse_x_) {
+                x = 3;
+            }
+        }
+        for (int j = 236; j <= 265; j++) {
+            if (j == mouse_x_) {
+                x = 4;
+            }
+        }
+        for (int j = 266; j <= 295; j++) {
+            if (j == mouse_x_) {
+                x = 5;
+            }
+        }
+        for (int j = 296; j <= 325; j++) {
+            if (j == mouse_x_) {
+                x = 6;
+            }
+        }
+        for (int j = 326; j <= 355; j++) {
+            if (j == mouse_x_) {
+                x = 7;
+            }
+        }
+    }
+}
 
 template <typename C>
 void PrintBackground(const C& color, const cinder::ivec2& size) {
@@ -80,9 +184,9 @@ void PrintBackground(const C& color, const cinder::ivec2& size) {
                                       cinder::app::getWindowHeight()/2-30.0f ) );
 
     size_t row = 0;
-    PrintText("Computer", color, size, {cinder::app::getWindowCenter().x + (++row) * 180,
+    PrintText("User", color, size, {cinder::app::getWindowCenter().x + (++row) * 180,
                                         cinder::app::getWindowCenter().y + (++row) * 30});
-    PrintText("User", color, size, {cinder::app::getWindowWidth() /2 - 180.0f,
+    PrintText("Computer", color, size, {cinder::app::getWindowWidth() /2 - 180.0f,
                                     cinder::app::getWindowHeight() / 2-325.0f});
 
     cinder::gl::drawStrokedRect( Rectf( cinder::app::getWindowWidth()/2+30.0f,

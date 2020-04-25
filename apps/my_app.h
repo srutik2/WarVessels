@@ -11,6 +11,8 @@ namespace myapp {
 
 class MyApp : public cinder::app::App {
  public:
+    int mouse_x_;
+    int mouse_y_;
   MyApp();
   void setup() override;
   void update() override;
@@ -20,6 +22,11 @@ class MyApp : public cinder::app::App {
   void DrawBoard();
   void PrintBoard();
   cinder::ciAnimatedGifRef gif_example;
+    void mouseDown( cinder::app::MouseEvent event );
+    void GatheringYLocation();
+    void GatheringXLocation();
+    int x;
+    int y;
 };
 
 }  // namespace myapp
