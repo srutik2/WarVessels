@@ -7,59 +7,77 @@
 
 
 #include "player.h"
+#include "menu.h"
+#include <iostream>
+#include "../src/board.h"
+#include <algorithm>
+#include <chrono>
+#include <string>
 
-class Menu {
-public:
-    // Constructor
-    Menu(Player* user_player, Player* computer_player, int lives, int width, int height);
 
-    // Destructor
-    ~Menu();
+using std::string;
 
-    // Asks player for the amount of players and creates the player objects
-    void SetGameUp();
+//change to string
+const char kNormalFont[] = "Papyrus";
+namespace mylibrary {
+    class Menu {
+    public:
 
-    //struct of points
-    struct Points {
-        Points(int x, int y) : x{x}, y{y} {};
+        bool computer_won = false;
+        bool user_won = false;
+        // Constructor
+        Menu(std::string, int lives, int width, int height);
 
-        int x;
-        int y;
-    };
+        // Destructor
+        //~Menu();
 
-    std::string playerName;
-    //vector of points
-    std::vector<Points> points;
-    int width;
-    int height;
-    int amountOfLives;
+        std::string user_name;
+
+        // Asks player for the amount of players and creates the player objects
+        void SetGameUp();
+
+        //struct of points
+        struct Points {
+            Points(int x, int y) : x{x}, y{y} {};
+
+            int x;
+            int y;
+        };
+
+        std::string playerName;
+        //vector of points
+        std::vector<Points> points;
+        int width;
+        int height;
+        int amountOfLives;
+
+        // Players for the game
+        Player *user_player_instance;
+        Player *computer_player_instance;
+
 
 // Driver for the game
-void PlayGame();
+        void PlayGame();
 
-private:
-    // Board information
+        void SetUpGame();
+
+        // Finishes game by resetting pointers
+        void FinishGame();
+
+        // Puts ships on the computers board for each live they have
+        void PlaceRandomShips(Player *player);
+
+        // Prints name, lives and board for given player
+        void PrintPlayerInfo(Player *p);
+
+        //user inputs where the ships reside
+        void PlacePlayerShips(Player *player, int col, int row);
+
+        //where the random computer ships are
+        int FindRandomRowOrCol(int num);
 
 
-    // Players for the game
-    Player *user_player_instance;
-    Player *computer_player_instance;
-
-    // Finishes game by resetting pointers
-    void FinishGame();
-
-    // Puts ships on the computers board for each live they have
-    void PlaceRandomShips(Player *player);
-
-    // Prints name, lives and board for given player
-    void PrintPlayerInfo(Player *p);
-
-    //user inputs where the ships reside
-    void PlacePlayerShips(Player *player);
-
-    //where the random computer ships are
-    int FindRandomRowOrCol(int num);
-};
-
+    };
+}
 
 #endif //FINALPROJECT_MENU_H
