@@ -39,7 +39,9 @@ namespace myapp {
  height(FLAGS_height),
  playerName(FLAGS_playerName),
  amount_of_lives(FLAGS_amount_of_lives),
- menu {FLAGS_playerName, FLAGS_amount_of_lives, FLAGS_width, FLAGS_height} { }
+ menu {FLAGS_playerName, FLAGS_amount_of_lives, FLAGS_width, FLAGS_height},
+ state_{GameState::kPickingShips},
+ count_{0}{ }
 
 void MyApp::setup() {
     background = cinder::gl::Texture2d::create(loadImage(loadAsset("backg.jpg")));
@@ -49,32 +51,37 @@ void MyApp::setup() {
 }
 
 void MyApp::update() {
-
-     if (menu.user_player_instance->getShips().size() == 0 && menu.computer_player_instance->getShips().size() == 0) {
-         state_ = GameState::kPickingShips;
-     }
+     std::cout << "user player size: " <<menu.user_player_instance->getShips().size()  << std::endl;
+     std::cout << "computer player size: " <<menu.computer_player_instance->getShips().size() << std::endl;
+     //if (menu.user_player_instance->getShips().size() == 0 && menu.computer_player_instance->getShips().size() == 0) {
+      //   state_ = GameState::kPickingShips;
+     //}
 
     if (state_ == GameState::kPickingShips) {
-        menu.PlaceRandomShips(menu.computer_player_instance);
-        DrawPickingShips();
-
+        if (menu.user_player_instance->getShips().size() == amount_of_lives) {
+            menu.PlaceRandomShips(menu.computer_player_instance);
+        }
         if (menu.computer_player_instance->getShips().size() == amount_of_lives && menu.user_player_instance->getShips().size() == amount_of_lives) {
             state_ = GameState::kShooting;
         }
     }
 
 
-    if (menu.user_player_instance->getShips().size() == 0|| menu.computer_player_instance->getShips().size() == 0) {
-       state_ = GameState::kGameOver;
-    }
+    //if (menu.user_player_instance->getShips().size() == 0|| menu.computer_player_instance->getShips().size() == 0) {
+    //   state_ = GameState::kGameOver;
+    //}
 
 
 
      if (state_ == GameState::kShooting) {
-         //draw instructions to shoot
-         int computer_shot_col = menu.FindRandomRowOrCol(0);
-         int computer_shot_row = menu.FindRandomRowOrCol(1);
-         menu.computer_player_instance->Attacked(computer_shot_col, computer_shot_row);
+         if (count_ == 1) {
+             int computer_shot_col = menu.FindRandomRowOrCol(0);
+             int computer_shot_row = menu.FindRandomRowOrCol(1);
+             menu.user_player_instance->Attacked(computer_shot_col, computer_shot_row);
+             std::cout << "computer col shot:: " << computer_shot_col << std::endl;
+             std::cout << "computer  row shot:: " << computer_shot_row << std::endl;
+             count_--;
+         }
      }
      //Menu menu(user_player, computer_player, amount_of_lives, width, height);
     //menu.PlayGame();
@@ -88,8 +95,11 @@ void MyApp::draw() {
     DrawBoard();
 
     if (state_ == GameState::kPickingShips) {
-        DrawPickingShips();
+        for (int ship_placement_count = 0; ship_placement_count < menu.user_player_instance->GetLives(); ship_placement_count++) {
+            DrawPickingShips();
+        }
     }
+
 
     if (state_ == GameState::kShooting) {
         DrawShootingInstructions();
@@ -132,13 +142,18 @@ void MyApp::mouseDown( cinder::app::MouseEvent event ) {
         if (state_ == GameState::kPickingShips) {
             GatheringXLocationUser();
             GatheringYLocationUser();
+            std::cout << "user x shot picking : " << user_x << std::endl;
+            std::cout << "user y shot picking: " << user_y << std::endl;
             menu.PlacePlayerShips(menu.user_player_instance, user_x, user_y);
         }
 
         if (state_ == GameState::kShooting) {
-            GatheringXLocationUser();
-            GatheringYLocationUser();
-            menu.user_player_instance->Attacked(user_x, user_y);
+            GatheringXLocationComputer();
+            GatheringYLocationComputer();
+            menu.computer_player_instance->Attacked(computer_x, computer_y);
+            std::cout << "user x shot: " << computer_x << std::endl;
+            std::cout << "user y shot: " << computer_y << std::endl;
+            count_++;
         }
         //console() << "Special thing happened!" << std::endl;
 
@@ -457,6 +472,5 @@ void MyApp::UserPrintBoard() {
         PrintText(printing_string, color, size, center);
 
  }
-
 
 }  // namespace myapp

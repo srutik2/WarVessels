@@ -10,6 +10,9 @@ namespace mylibrary {
         computer_player_instance = new Player("Computer", amountOfLives, width, height);
     }
 
+    void Menu::DeterminingWinner() {
+
+    }
 
 /*
 void Menu::SetGameUp() {
@@ -94,7 +97,11 @@ void Menu::SetGameUp() {
 
     void Menu::PlaceRandomShips(Player *player) {
         for (int i{0}; i < player->GetLives(); i++) {
-            player->AddShip((rand() % width), (rand() % height));
+            int col = rand() % width;
+            int row = rand() % height;
+            std::cout << "computer chosen col " << col << std::endl;
+            std::cout << "computer chosen row " << row << std::endl;
+            player->AddShip(col, row);
         }
     }
 
@@ -102,7 +109,7 @@ void Menu::SetGameUp() {
     void Menu::PlacePlayerShips(Player *player, int col, int row) {
        // player->PrintBoard();
 
-        for (int ship_placement_count = 0; ship_placement_count < player->GetLives(); ship_placement_count++) {
+        //for (int ship_placement_count = 0; ship_placement_count < player->GetLives(); ship_placement_count++) {
            // int number_of_picks = player->GetLives() - ship_placement_count;
            //std::cout << "pick points to place (you can pick up to " << number_of_picks << ")" << std::endl;
 /*
@@ -112,10 +119,15 @@ void Menu::SetGameUp() {
                 continue;
             }
             */
+//std::cout << "ship count" << ship_placement_count << std::endl;
+//std::cout << "number of lives:           " << player->GetLives() << std::endl;
+//std::cout << "number of ships          " << player->getShips().size() << std::endl;
             player->AddShip(col, row);
+           // std::cout << "number of ships          " << player->getShips().size() << std::endl;
+          //  std::cout << "ship placement count         " << ship_placement_count << std::endl;
             //std::cout << "you have placed a ship here: col - " << col << " row - " << row << std::endl;
 
-        }
+       // }
 
     }
 

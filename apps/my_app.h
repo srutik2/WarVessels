@@ -23,6 +23,7 @@ class MyApp : public cinder::app::App {
     GameState state_ = GameState::kPickingShips;
     int mouse_x_;
     int mouse_y_;
+    int count_;
     MyApp();
     const int width;
     const int height;
@@ -56,6 +57,7 @@ class MyApp : public cinder::app::App {
     std::string printing_string_;
     mylibrary::Player *user_player;
     mylibrary::Player *computer_player;
+    void ResetGame();
 private:
     mylibrary::Menu menu;
 };
