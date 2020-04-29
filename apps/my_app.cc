@@ -41,18 +41,29 @@ namespace myapp {
  amount_of_lives(FLAGS_amount_of_lives),
  menu {FLAGS_playerName, FLAGS_amount_of_lives, FLAGS_width, FLAGS_height},
  state_{GameState::kPickingShips},
- count_{0}{ }
+ count_{0},
+ someone_won{false} { }
 
 void MyApp::setup() {
     background = cinder::gl::Texture2d::create(loadImage(loadAsset("backg.jpg")));
-    gif_example = cinder::ciAnimatedGif::create(loadAsset("source.gif"));
+    gif_example = cinder::ciAnimatedGif::create(loadAsset("something.gif"));
     //user_player = new mylibrary::Player(playerName, amount_of_lives, width, height);
     //computer_player = new mylibrary::Player("Computer", amount_of_lives, width, height);
 }
 
 void MyApp::update() {
+     console() << "slkdajf" << std::endl;
      std::cout << "user player size: " <<menu.user_player_instance->getShips().size()  << std::endl;
      std::cout << "computer player size: " <<menu.computer_player_instance->getShips().size() << std::endl;
+
+     if (menu.DeterminingWinner() == 0) {
+         state_ = GameState::kComputerWinner;
+     }
+
+    if (menu.DeterminingWinner() == 1) {
+        state_ = GameState::kUserWinner;
+    }
+
      //if (menu.user_player_instance->getShips().size() == 0 && menu.computer_player_instance->getShips().size() == 0) {
       //   state_ = GameState::kPickingShips;
      //}
@@ -65,7 +76,6 @@ void MyApp::update() {
             state_ = GameState::kShooting;
         }
     }
-
 
     //if (menu.user_player_instance->getShips().size() == 0|| menu.computer_player_instance->getShips().size() == 0) {
     //   state_ = GameState::kGameOver;
@@ -90,9 +100,12 @@ void MyApp::update() {
 
 void MyApp::draw() {
 
-    cinder::gl::color(Color::white());
-    cinder::gl::draw(background, getWindowBounds());
-    DrawBoard();
+     if (!someone_won) {
+         cinder::gl::color(Color::white());
+         cinder::gl::draw(background, getWindowBounds());
+         DrawBoard();
+     }
+
 
     if (state_ == GameState::kPickingShips) {
         for (int ship_placement_count = 0; ship_placement_count < menu.user_player_instance->GetLives(); ship_placement_count++) {
@@ -100,11 +113,14 @@ void MyApp::draw() {
         }
     }
 
-
     if (state_ == GameState::kShooting) {
         DrawShootingInstructions();
     }
-    //gif_example->draw();
+
+    if (state_ == GameState::kUserWinner) {
+        someone_won = false;
+        DrawWinningScreen();
+    }
 }
 
 
@@ -383,7 +399,7 @@ void MyApp::DrawBoard() {
 
         PrintText("~Battleship~", color, size, center);
         PrintBackground(color, size);
-        ComputerPrintBoard();
+         ComputerPrintBoard();
         UserPrintBoard();
 }
 
@@ -405,6 +421,11 @@ void MyApp::DrawPickingShips() {
         size_t row = 0;
         PrintText(text, color, size, {cinder::app::getWindowWidth() /2 - 180.0f,
                                       cinder::app::getWindowCenter().y + (++row) * 100});
+    }
+
+    void MyApp::DrawWinningScreen() {
+        cinder::gl::clear(Color(0, 0, 1));
+        gif_example->draw();
     }
 
 void MyApp::ComputerPrintBoard() {

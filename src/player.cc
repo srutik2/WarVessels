@@ -33,6 +33,7 @@ namespace mylibrary {
 
 
     int Player::Attacked(int col, int row) {
+        if_played = true;
         if (col > grid->GetWidth() || col < 0 ||
             row > grid->GetHeight() || row < 0) {
             return -1;

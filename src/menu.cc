@@ -6,12 +6,19 @@
 namespace mylibrary {
     Menu::Menu(std::string user_name, int lives, int width, int height) :
             user_name(user_name), amountOfLives(lives), width(width), height(height) {
-        user_player_instance = new Player(playerName, amountOfLives, width, height);
+        user_player_instance = new Player(user_name, amountOfLives, width, height);
         computer_player_instance = new Player("Computer", amountOfLives, width, height);
     }
 
-    void Menu::DeterminingWinner() {
+    int Menu::DeterminingWinner() {
+        if (user_player_instance->getShips().size() == 0 && user_player_instance->if_played) {
+            return 0;
+        }
 
+        if (computer_player_instance->getShips().size() == 0 && user_player_instance->if_played) {
+            return 1;
+        }
+        return 2;
     }
 
 /*

@@ -17,13 +17,15 @@ class MyApp : public cinder::app::App {
     enum class GameState {
         kShooting,
         kPickingShips,
-        kGameOver,
+        kUserWinner,
+        kComputerWinner
     };
 
     GameState state_ = GameState::kPickingShips;
     int mouse_x_;
     int mouse_y_;
     int count_;
+    bool someone_won;
     MyApp();
     const int width;
     const int height;
@@ -45,6 +47,7 @@ class MyApp : public cinder::app::App {
     void DrawPickingShips();
     void DrawShootingInstructions();
     void GatheringYLocationUser();
+    void DrawWinningScreen();
     int user_x;
     int user_y;
     int computer_x;

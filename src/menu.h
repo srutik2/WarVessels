@@ -59,6 +59,8 @@ namespace mylibrary {
 // Driver for the game
         void PlayGame();
 
+        int DeterminingWinner();
+
         void SetUpGame();
 
         // Finishes game by resetting pointers
