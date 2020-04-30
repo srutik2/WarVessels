@@ -21,6 +21,13 @@ class MyApp : public cinder::app::App {
         kComputerWinner
     };
 
+    enum class Shooting {
+        kUserAttacked,
+        kComputerAttacked,
+        kNoOneAtttacked
+    };
+
+    Shooting state__ = Shooting::kNoOneAtttacked;
     GameState state_ = GameState::kPickingShips;
     int mouse_x_;
     int mouse_y_;
@@ -31,8 +38,13 @@ class MyApp : public cinder::app::App {
     const int height;
     const std::string playerName;
     const int amount_of_lives;
-
+    int general_location_x_computer;
+    int general_location_x_user;
+    int general_location_y_user;
+    int general_location_y_computer;
+    void DrawHitOrMiss(char c);
   void setup() override;
+    char hit_or_not;
   void update() override;
   void draw() override;
   void keyDown(cinder::app::KeyEvent) override;
@@ -42,11 +54,11 @@ class MyApp : public cinder::app::App {
   cinder::ciAnimatedGifRef gif_example;
     void mouseDown( cinder::app::MouseEvent event );
     void GatheringYLocationComputer();
-    void GatheringXLocationUser();
+    void GatheringXLocationUser(int col);
     void GatheringXLocationComputer();
     void DrawPickingShips();
     void DrawShootingInstructions();
-    void GatheringYLocationUser();
+    void GatheringYLocationUser(int row);
     void DrawWinningScreen();
     int user_x;
     int user_y;
@@ -54,6 +66,8 @@ class MyApp : public cinder::app::App {
     int computer_y;
     int x;
     int y;
+    bool computer_attacked;
+    bool user_attacked;
     void ComputerPrintBoard();
     void UserPrintBoard();
     void TakingInStringInput(std::string printing_string);
@@ -61,6 +75,15 @@ class MyApp : public cinder::app::App {
     mylibrary::Player *user_player;
     mylibrary::Player *computer_player;
     void ResetGame();
+    struct Points {
+        Points(int x, int y, std::string s) : x{x}, y{y}, s{s} {};
+
+        int x;
+        int y;
+        std::string s;
+    };
+    std::vector<Points> points;
+    std::map<std::vector<Points>, char> points_and_character;
 private:
     mylibrary::Menu menu;
 };

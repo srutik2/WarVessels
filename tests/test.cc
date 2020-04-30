@@ -6,7 +6,7 @@
 #include "../src/player.h"
 
 TEST_CASE("Testing Player Class") {
-    Player p("Player 1", 5, 5, 5);
+    mylibrary::Player p("Player 1", 5, 5, 5);
     REQUIRE(p.GetName() == "Player 1");
     REQUIRE(p.GetLives() == 5);
     p.GetLives()--;
@@ -33,7 +33,7 @@ TEST_CASE("Testing Board Class") {
     int width = 3;
     int height = 4;
 
-    Board* board = new Board(width, height);
+    mylibrary::Board* board = new mylibrary::Board(width, height);
     REQUIRE(board->GetWidth() == width);
     REQUIRE(board->GetHeight() == height);
     REQUIRE(board->Hit(width,height) == 'X');
