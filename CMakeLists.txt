@@ -109,7 +109,7 @@ FetchContent_GetProperties(ciAnimatedGif)
 if(NOT ciAnimatedGif_POPULATED)
     FetchContent_Populate(ciAnimatedGif)
      #This is overkill since we only need a single file. Though it is a clean solution.
-#    add_library(ciAnimatedGif src/board.cc src/board.h src/menu.cc src/menu.h src/player.cc src/player.h)
+#    add_library(ciAnimatedGif src/board.cc src/board.h src/game_engine_.cc src/game_engine_.h src/player.cc src/player.h)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 # Add more CMake libraries here ...

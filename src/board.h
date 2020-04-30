@@ -4,21 +4,16 @@
 
 #ifndef FINALPROJECT_BOARD_H
 #define FINALPROJECT_BOARD_H
-
-
 #include <string>
 
 namespace mylibrary {
     class Board {
     public:
-
-        void SetUpGame();
         // Constructor
         Board(int width, int height);
 
         // Destructor
         ~Board();
-
 
         // Prints board to console
         void Print();
@@ -29,10 +24,10 @@ namespace mylibrary {
         // Replaces spot on grid with an 'O'
         char Miss(int width, int height);
 
-        // Returns width of board
+        // Returns width_ of board
         int &GetWidth();
 
-        // Returns height of board
+        // Returns height_ of board
         int &GetHeight();
 
         // Coordinates system info
@@ -43,8 +38,8 @@ namespace mylibrary {
         const static int MAX_WIDTH = 8;
         const static int MAX_HEIGHT = 8;
 
+        // grid itself
         std::string grid[MAX_WIDTH][MAX_HEIGHT];
     };
-
 }
 #endif //FINALPROJECT_BOARD_H

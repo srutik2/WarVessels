@@ -58,6 +58,7 @@ namespace mylibrary {
         // Vector of all ships this player has
         std::vector<Ship> ships;
 
+        // get ships vector
         const std::vector<Ship> &getShips() const;
 
     };
