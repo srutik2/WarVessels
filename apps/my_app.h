@@ -16,6 +16,12 @@ public:
     MyApp();
 
 private:
+
+    //not in room(kAccusation)
+    //in room making suggestion (kSuggestion)
+    // kWaiting
+    // kDealingCards
+    //kGameOver
     // game state enum signifying  which part of  the game we are in
     enum class GameState {
         kShooting,
@@ -40,6 +46,10 @@ private:
     // background
     cinder::gl::Texture2dRef background;
 
+    cinder::gl::Texture2dRef ship;
+
+    cinder::gl::Texture2dRef missle;
+
     // winning fid
     cinder::ciAnimatedGifRef gif_winning_screen_;
 
@@ -51,6 +61,8 @@ private:
     void GatheringXLocationUser(int col);
     void GatheringYLocationUser(int row);
     void GatheringXLocationComputer();
+
+    void PrintImage(const cinder::gl::Texture2dRef &texture, const cinder::ivec2& size, const cinder::vec2& loc);
 
     // drew based in which game state or shooting state the game is in
     void DrawPickingShips();

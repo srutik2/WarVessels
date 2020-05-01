@@ -31,6 +31,9 @@ using std::string;
 using cinder::TextBox;
 //change to string
 const char kNormalFont[] = "Papyrus";
+using std::chrono::duration_cast;
+using std::chrono::seconds;
+using std::chrono::system_clock;
 
 MyApp::MyApp() :
         width_(FLAGS_width),
@@ -52,8 +55,10 @@ MyApp::MyApp() :
         hit_or_not_user_{'X'} { }
 
 void MyApp::setup() {
-    background = cinder::gl::Texture2d::create(loadImage(loadAsset("backg.jpg")));
+    background = cinder::gl::Texture2d::create(loadImage(loadAsset("darkoceanbackground.jpg")));
     gif_winning_screen_ = cinder::ciAnimatedGif::create(loadAsset("something.gif"));
+    ship = cinder::gl::Texture2d::create(loadImage(loadAsset("Webp.net-resizeimage.png")));
+    missle = cinder::gl::Texture2d::create(loadImage(loadAsset("missle_.png")));
 }
 
 
@@ -86,9 +91,9 @@ void MyApp::update() {
              int attacked_number = game_engine_.user_player_->Attacked(computer_shot_col, computer_shot_row); // user attacked by computer player shots
              shooting_state_ = Shooting::kUserAttacked; // user attacked
 
-             if ( attacked_number == 0) {
+             if ( attacked_number == 1) {
                  hit_or_not_computer_ = 'O';
-             } else if (attacked_number == 1) {
+             } else if (attacked_number == 0) {
                  hit_or_not_computer_ = 'X';
              }
 
@@ -134,6 +139,17 @@ void MyApp::draw() {
 
 void MyApp::keyDown(KeyEvent event) { }
 
+void MyApp::PrintImage(const cinder::gl::Texture2dRef &texture, const cinder::ivec2 &size, const cinder::vec2 &loc) {
+    auto box = TextBox()
+            .alignment(TextBox::CENTER)
+            .size(size)
+            .backgroundColor(ColorA(0, 0, 0, 0));
+    const auto box_size = box.getSize();
+    const cinder::vec2 locp = {loc.x - box_size.x / 2, loc.y - box_size.y / 2};
+    const auto surface = box.render();
+    cinder::gl::draw(texture, locp);
+}
+
 
 template <typename C>
 void PrintText(const string& text, const C& color, const cinder::ivec2& size,
@@ -178,9 +194,9 @@ void MyApp::mouseDown( cinder::app::MouseEvent event ) {
             std::cout << "general location y computer:  " << general_location_y_computer_ << std::endl;
             int attacked_number = game_engine_.computer_player_->Attacked(computer_x, computer_y);
 
-            if ( attacked_number == 0) {
+            if ( attacked_number == 1) {
                 hit_or_not_user_ = 'O';
-            } else if (attacked_number == 1) {
+            } else if (attacked_number == 0) {
                 hit_or_not_user_ = 'X';
             }
 
@@ -192,7 +208,9 @@ void MyApp::mouseDown( cinder::app::MouseEvent event ) {
     }
 
 }
-
+// if the user clicked within the cinder square
+// if the user clicked within the computer or square square
+// divide width and height by the increment
 void MyApp::GatheringYLocationComputer() {
     general_location_y_computer_ = 0;
     for (int i = 130; i <= 365; i++) {
@@ -469,7 +487,7 @@ void PrintBackground(const C& color, const cinder::ivec2& size) {
                                       cinder::app::getWindowWidth()/2-30.0f,
                                       cinder::app::getWindowHeight()/2-30.0f ) );
     size_t row = 0;
-    PrintText("User", Color::black(), size, {cinder::app::getWindowCenter().x + (++row) * 180,
+    PrintText("User", Color::white(), size, {cinder::app::getWindowCenter().x + (++row) * 180,
                                         cinder::app::getWindowCenter().y + (++row) * 30});
     PrintText("Computer", color, size, {cinder::app::getWindowWidth() /2 - 180.0f,
                                     cinder::app::getWindowHeight() / 2-325.0f});
@@ -491,7 +509,9 @@ void MyApp::DrawBoard() {
      const cinder::ivec2 size = {500, 50};
      const Color color = Color::white();
      PrintText("~Battleship~", color, size, center);
-
+     PrintImage(missle, size, {cinder::app::getWindowWidth() /2-80.0f, cinder::app::getWindowHeight() / 1.95});
+    PrintImage(missle, size, {cinder::app::getWindowWidth() /2-80.0f, cinder::app::getWindowHeight() / 2-375.0f});
+    PrintImage(missle, size, {cinder::app::getWindowWidth() /2+275.0f, cinder::app::getWindowHeight() / 1.95});
      PrintBackground(color, size);
      DrawComputerBoard();
      DrawUserBoard();
@@ -499,7 +519,7 @@ void MyApp::DrawBoard() {
 
 
 void MyApp::DrawHitOrMissUser(char character) {
-    const Color color = Color::white();
+    const Color color = Color::black();
     const cinder::vec2 center = getWindowCenter();
     const cinder::ivec2 size = {500, 50};
     std::string print(1, character);
@@ -511,11 +531,11 @@ void MyApp::DrawHitOrMissUser(char character) {
         PrintText(points.at(i).s, color, size, {points.at(i).x,
                                                 points.at(i).y});
     }
- }
+}
 
 
- void MyApp::DrawHitOrMissComputer(char character) {
-     const Color color = Color::white();
+void MyApp::DrawHitOrMissComputer(char character) {
+     const Color color = Color::black();
      const cinder::vec2 center = getWindowCenter();
      const cinder::ivec2 size = {500, 50};
      std::string print(1, character);
@@ -578,7 +598,8 @@ void MyApp::DrawComputerBoard() {
         string str= std::to_string(row);
         PrintText(str, color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid - 40, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
         for (int col{0}; col < width_; col++) {
-            PrintText(board->grid[col][row], color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
+            PrintImage(ship, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
+            //PrintText(board->grid[col][row], color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
             horizontal_location_in_grid = horizontal_location_in_grid - 30;
         }
         vertical_location_in_grid = vertical_location_in_grid - 30;
@@ -591,7 +612,7 @@ void MyApp::DrawUserBoard() {
     mylibrary::Board* board = new mylibrary::Board(width_, height_);
     const cinder::vec2 center = getWindowCenter();
     const cinder::ivec2 size = {50, 50};
-    const Color color = Color::black();
+    const Color color = Color::white();
     int horizontal_location_numbering = -100;
 
     for (int i{0}; i < width_; i++) {
@@ -607,12 +628,15 @@ void MyApp::DrawUserBoard() {
         string str= std::to_string(row);
         PrintText(str, color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid - 40, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
         for (int col{0}; col < width_; col++) {
-            PrintText(board->grid[col][row], color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
+            PrintImage(ship, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
+            //PrintText(board->grid[col][row], color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
             horizontal_location_in_grid = horizontal_location_in_grid - 30;
         }
         vertical_location_in_grid = vertical_location_in_grid - 30;
         horizontal_location_in_grid = -100.0f;
     }
  }
+
+
 
 }  // namespace myapp

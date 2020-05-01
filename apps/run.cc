@@ -11,8 +11,8 @@ using cinder::app::App;
 using cinder::app::RendererGl;
 
 DEFINE_string(playerName, "Sruti Kamarajugadda", "the name of the user");
-DEFINE_int32(width, 2, "the board width_");
-DEFINE_int32(height, 2, "the board height_");
+DEFINE_int32(width, 6, "the board width_");
+DEFINE_int32(height, 6, "the board height_");
 DEFINE_int32(amount_of_lives, 2, "the amount of lives in the game");
 
 
