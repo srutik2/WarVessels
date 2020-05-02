@@ -12,6 +12,7 @@
 namespace mylibrary {
     class Player {
     public:
+        bool hit_or_not;
         bool if_played = false;
         // Constructor
         Player(std::string name, int lives, int width, int height);

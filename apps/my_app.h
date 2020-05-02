@@ -27,7 +27,8 @@ private:
         kShooting,
         kPickingShips,
         kUserWinner,
-        kComputerWinner
+        kComputerWinner,
+        KGameNotStarted
     };
 
     //  shooting enum signifying whose turn it is when shooting
@@ -46,10 +47,15 @@ private:
     // background
     cinder::gl::Texture2dRef background;
 
+    cinder::gl::Texture2dRef openingscreen;
+
+    cinder::gl::Texture2dRef winningscreen;
+
     cinder::gl::Texture2dRef ship;
 
     cinder::gl::Texture2dRef missle;
 
+    cinder::gl::Texture2dRef anchor;
     // winning fid
     cinder::ciAnimatedGifRef gif_winning_screen_;
 
@@ -73,6 +79,7 @@ private:
     void DrawComputerBoard();
     void DrawUserBoard();
     void DrawHitOrMissUser(char character);
+    void DrawChosenShips();
 
     // cinder already implemented methods
     void setup() override;
@@ -112,6 +119,12 @@ private:
     char hit_or_not_computer_;
     char hit_or_not_user_;
 
+    struct location {
+        location(int x, int y) : x{x}, y{y} {};
+
+        int x;
+        int y;
+    };
 
     // point strut with x y location and a character
     struct Points {
@@ -121,6 +134,8 @@ private:
         int y;
         std::string s;
     };
+
+    std::vector<location> locations;
 
     // vector of points
     std::vector<Points> points;

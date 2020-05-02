@@ -33,6 +33,7 @@ void Player::AddShip(int col, int row) {
 
 int Player::Attacked(int col, int row) {
     if_played = true;
+    hit_or_not = false;
     if (col > grid->GetWidth() || col < 0 || row > grid->GetHeight() || row < 0) {
         return -1;
     }
@@ -43,11 +44,13 @@ int Player::Attacked(int col, int row) {
             ships[i] = ships[ships.size() - 1];
             ships.pop_back();
             lives--;
+            hit_or_not = true;
             return 1;
         }
     }
 
     grid->Miss(col, row);
+    hit_or_not = false;
     return 0;
 }
 

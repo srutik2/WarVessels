@@ -31,9 +31,6 @@ using std::string;
 using cinder::TextBox;
 //change to string
 const char kNormalFont[] = "Papyrus";
-using std::chrono::duration_cast;
-using std::chrono::seconds;
-using std::chrono::system_clock;
 
 MyApp::MyApp() :
         width_(FLAGS_width),
@@ -41,7 +38,7 @@ MyApp::MyApp() :
         user_player_name_(FLAGS_playerName),
         amount_of_lives_(FLAGS_amount_of_lives),
         game_engine_ {FLAGS_playerName, FLAGS_amount_of_lives, FLAGS_width, FLAGS_height},
-        state_{GameState::kPickingShips},
+        state_{GameState::KGameNotStarted},
         is_computer_turn_{false},
         has_someone_won{false},
         general_location_x_user_{0},
@@ -51,20 +48,23 @@ MyApp::MyApp() :
         is_computer_attacked_{false},
         is_user_attacked_{false},
         shooting_state_{Shooting::kNoOneAtttacked},
-        hit_or_not_computer_{'X'},
-        hit_or_not_user_{'X'} { }
+        hit_or_not_computer_{'A'},
+        hit_or_not_user_{'B'} { }
 
 void MyApp::setup() {
     background = cinder::gl::Texture2d::create(loadImage(loadAsset("darkoceanbackground.jpg")));
-    gif_winning_screen_ = cinder::ciAnimatedGif::create(loadAsset("something.gif"));
+    openingscreen = cinder::gl::Texture2d::create(loadImage(loadAsset("war vessels.png")));
+    gif_winning_screen_ = cinder::ciAnimatedGif::create(loadAsset("ezgif.com-resize.gif"));
     ship = cinder::gl::Texture2d::create(loadImage(loadAsset("Webp.net-resizeimage.png")));
     missle = cinder::gl::Texture2d::create(loadImage(loadAsset("missle_.png")));
+    winningscreen = cinder::gl::Texture2d::create(loadImage(loadAsset("ws.jpg")));
+    anchor = cinder::gl::Texture2d::create(loadImage(loadAsset("anchor.png")));
 }
 
 
 void MyApp::update() {
-     std::cout << "user player size: " << game_engine_.user_player_->getShips().size() << std::endl;
-     std::cout << "computer player size: " << game_engine_.computer_player_->getShips().size() << std::endl;
+     //std::cout << "user player size: " << game_engine_.user_player_->getShips().size() << std::endl;
+     //std::cout << "computer player size: " << game_engine_.computer_player_->getShips().size() << std::endl;
 
      if (game_engine_.DeterminingWinner() == 0) {
          state_ = GameState::kComputerWinner;
@@ -84,17 +84,20 @@ void MyApp::update() {
     }
 
      if (state_ == GameState::kShooting) {
-         if (is_computer_turn_ == true) {
+         if (is_computer_turn_) {
              draw();
              int computer_shot_col = game_engine_.FindRandomRowOrCol(0);
              int computer_shot_row = game_engine_.FindRandomRowOrCol(1);
-             int attacked_number = game_engine_.user_player_->Attacked(computer_shot_col, computer_shot_row); // user attacked by computer player shots
+             hit_or_not_computer_ = false;
+             game_engine_.user_player_->Attacked(computer_shot_col, computer_shot_row); // user attacked by computer player shots
              shooting_state_ = Shooting::kUserAttacked; // user attacked
 
-             if ( attacked_number == 1) {
-                 hit_or_not_computer_ = 'O';
-             } else if (attacked_number == 0) {
+             if (game_engine_.user_player_->hit_or_not) {
                  hit_or_not_computer_ = 'X';
+             }
+
+             if (!game_engine_.user_player_->hit_or_not) {
+                 hit_or_not_computer_ = 'O';
              }
 
              std::cout << "computer col shot:: " << computer_shot_col << std::endl;
@@ -108,23 +111,27 @@ void MyApp::update() {
 
 
 void MyApp::draw() {
+    const cinder::ivec2 size = {500, 50};
      cinder::gl::color(Color::white());
      cinder::gl::draw(background, getWindowBounds());
      DrawBoard();
-
+     if (state_ == GameState::KGameNotStarted) {
+         cinder::gl::draw(openingscreen, getWindowBounds());
+     }
      if (state_ == GameState::kPickingShips) {
         for (int ship_placement_count = 0; ship_placement_count < game_engine_.user_player_->GetLives(); ship_placement_count++) {
             DrawPickingShips();
+            DrawChosenShips();
         }
     }
 
     if (state_ == GameState::kShooting) {
         DrawShootingInstructions();
         if (shooting_state_ == Shooting::kComputerAttacked) {
-            DrawHitOrMissComputer(hit_or_not_computer_);
+            DrawHitOrMissComputer(hit_or_not_user_);
         }
         if (shooting_state_ == Shooting::kUserAttacked) {
-            DrawHitOrMissUser(hit_or_not_user_);
+            DrawHitOrMissUser(hit_or_not_computer_);
         }
 
     }
@@ -136,8 +143,11 @@ void MyApp::draw() {
     }
 }
 
-
-void MyApp::keyDown(KeyEvent event) { }
+void MyApp::keyDown(KeyEvent event) {
+    if (event.KEY_1) {
+        state_ = GameState::kPickingShips;
+    }
+}
 
 void MyApp::PrintImage(const cinder::gl::Texture2dRef &texture, const cinder::ivec2 &size, const cinder::vec2 &loc) {
     auto box = TextBox()
@@ -171,7 +181,7 @@ void PrintText(const string& text, const C& color, const cinder::ivec2& size,
 }
 
 void MyApp::mouseDown( cinder::app::MouseEvent event ) {
-    if (event.isRight() && event.isShiftDown()) {
+    if (event.isRight()) {
         auto mMouseLoc = event.getPos();
         mouse_x_ = mMouseLoc.x;
         mouse_y_ = mMouseLoc.y;
@@ -192,12 +202,13 @@ void MyApp::mouseDown( cinder::app::MouseEvent event ) {
             std::cout << "computer y:  " << computer_y << std::endl;
             std::cout << "general location x computer:  " << general_location_x_computer_ << std::endl;
             std::cout << "general location y computer:  " << general_location_y_computer_ << std::endl;
-            int attacked_number = game_engine_.computer_player_->Attacked(computer_x, computer_y);
+            hit_or_not_user_ = false;
+            game_engine_.computer_player_->Attacked(computer_x, computer_y);
 
-            if ( attacked_number == 1) {
-                hit_or_not_user_ = 'O';
-            } else if (attacked_number == 0) {
+            if (game_engine_.computer_player_->hit_or_not) {
                 hit_or_not_user_ = 'X';
+            } else if (!game_engine_.computer_player_->hit_or_not) {
+                hit_or_not_user_ = 'O';
             }
 
             shooting_state_ = Shooting::kComputerAttacked;
@@ -208,9 +219,7 @@ void MyApp::mouseDown( cinder::app::MouseEvent event ) {
     }
 
 }
-// if the user clicked within the cinder square
-// if the user clicked within the computer or square square
-// divide width and height by the increment
+
 void MyApp::GatheringYLocationComputer() {
     general_location_y_computer_ = 0;
     for (int i = 130; i <= 365; i++) {
@@ -350,61 +359,61 @@ void MyApp::GatheringXLocationUser(int col) {
         for (int i = 485; i <= 725; i++) {
             for (int j = 485; j <=515; j++) {
                 if (col == 0) {
-                    general_location_x_user_ = 495;
+                    general_location_x_user_ = 500;
                 }
                 if (j == mouse_x_) {
                     user_x = 0;
-                    general_location_x_user_ = 495;
+                    general_location_x_user_ = 500;
                 }
             }
             for (int j = 516; j <= 545; j++) {
                 if (col == 1) {
-                    general_location_x_user_ = 525;
+                    general_location_x_user_ = 530;
                 }
                 if (j == mouse_x_) {
                     user_x = 1;
-                    general_location_x_user_ = 525;
+                    general_location_x_user_ = 530;
                 }
             }
             for (int j = 546; j <= 575; j++) {
                 if (col == 2) {
-                    general_location_x_user_ = 555;
+                    general_location_x_user_ = 560;
                 }
                 if (j == mouse_x_) {
                     user_x = 2;
-                    general_location_x_user_ = 555;
+                    general_location_x_user_ = 560;
                 }
             }
             for (int j = 576; j <= 605; j++) {
                 if (col == 3) {
-                    general_location_x_user_ = 575;
+                    general_location_x_user_ = 580;
                 }
                 if (j == mouse_x_) {
                     user_x = 3;
-                    general_location_x_user_ = 575;
+                    general_location_x_user_ = 580;
                 }
             }
             for (int j = 606; j <= 635; j++) {
                 if (col == 4) {
-                    general_location_x_user_ = 615;
+                    general_location_x_user_ = 620;
                 }
                 if (j == mouse_x_) {
                     user_x = 4;
-                    general_location_x_user_ = 615;
+                    general_location_x_user_ = 620;
                 }
             }
             for (int j = 636; j <= 655; j++) {
                 if (col == 5) {
-                    general_location_x_user_ = 645;
+                    general_location_x_user_ = 650;
                 }
                 if (j == mouse_x_) {
                     user_x = 5;
-                    general_location_x_user_ = 645;
+                    general_location_x_user_ = 650;
                 }
             }
             for (int j = 666; j <= 695; j++) {
                 if (col == 6) {
-                    general_location_x_user_ = 675;
+                    general_location_x_user_ = 680;
                 }
                 if (j == mouse_x_) {
                     user_x = 6;
@@ -413,11 +422,11 @@ void MyApp::GatheringXLocationUser(int col) {
             }
             for (int j = 696; j <= 725; j++) {
                 if (col == 7) {
-                    general_location_x_user_ = 705;
+                    general_location_x_user_ = 710;
                 }
                 if (j == mouse_x_) {
                     user_x = 7;
-                    general_location_x_user_ = 705;
+                    general_location_x_user_ = 710;
                 }
             }
         }
@@ -427,49 +436,49 @@ void MyApp::GatheringXLocationUser(int col) {
 void MyApp::GatheringXLocationComputer() {
     general_location_x_computer_ = 0;
     for (int i = 115; i <= 310; i++) {
-        for (int j = 115; j <=145; j++) {
+        for (int j = 115; j <=135; j++) {
             if (j == mouse_x_) {
                 computer_x = 0;
                 general_location_x_computer_ = 125;
             }
         }
-        for (int j = 146; j <= 175; j++) {
+        for (int j = 146; j <= 165; j++) {
             if (j == mouse_x_) {
                 computer_x = 1;
                 general_location_x_computer_ = 155;
             }
         }
-        for (int j = 176; j <= 205; j++) {
+        for (int j = 176; j <= 195; j++) {
             if (j == mouse_x_) {
                 computer_x = 2;
                 general_location_x_computer_ = 185;
             }
         }
-        for (int j = 206; j <= 235; j++) {
+        for (int j = 206; j <= 225; j++) {
             if (j == mouse_x_) {
                 computer_x = 3;
                 general_location_x_computer_ = 215;
             }
         }
-        for (int j = 236; j <= 265; j++) {
+        for (int j = 232; j <= 255; j++) {
             if (j == mouse_x_) {
                 computer_x = 4;
                 general_location_x_computer_ = 245;
             }
         }
-        for (int j = 266; j <= 295; j++) {
+        for (int j = 266; j <= 285; j++) {
             if (j == mouse_x_) {
                 computer_x = 5;
                 general_location_x_computer_ = 275;
             }
         }
-        for (int j = 296; j <= 325; j++) {
+        for (int j = 296; j <= 315; j++) {
             if (j == mouse_x_) {
                 computer_x = 6;
                 general_location_x_computer_ = 305;
             }
         }
-        for (int j = 326; j <= 355; j++) {
+        for (int j = 326; j <= 345; j++) {
             if (j == mouse_x_) {
                 computer_x = 7;
                 general_location_x_computer_ = 335;
@@ -492,7 +501,7 @@ void PrintBackground(const C& color, const cinder::ivec2& size) {
     PrintText("Computer", color, size, {cinder::app::getWindowWidth() /2 - 180.0f,
                                     cinder::app::getWindowHeight() / 2-325.0f});
     PrintText("Instructions:", color, size, {cinder::app::getWindowWidth() /2 - 180.0f,
-                                            cinder::app::getWindowCenter().y + (++row) * 19});
+                                             cinder::app::getWindowCenter().y + (++row) * 19});
     cinder::gl::drawStrokedRect( Rectf( cinder::app::getWindowWidth()/2+30.0f,
                                         cinder::app::getWindowHeight()/2+30.0f,
                                         cinder::app::getWindowWidth()/2+350.0f,
@@ -510,8 +519,8 @@ void MyApp::DrawBoard() {
      const Color color = Color::white();
      PrintText("~Battleship~", color, size, center);
      PrintImage(missle, size, {cinder::app::getWindowWidth() /2-80.0f, cinder::app::getWindowHeight() / 1.95});
-    PrintImage(missle, size, {cinder::app::getWindowWidth() /2-80.0f, cinder::app::getWindowHeight() / 2-375.0f});
-    PrintImage(missle, size, {cinder::app::getWindowWidth() /2+275.0f, cinder::app::getWindowHeight() / 1.95});
+     PrintImage(missle, size, {cinder::app::getWindowWidth() /2-80.0f, cinder::app::getWindowHeight() / 2-375.0f});
+     PrintImage(missle, size, {cinder::app::getWindowWidth() /2+275.0f, cinder::app::getWindowHeight() / 1.95});
      PrintBackground(color, size);
      DrawComputerBoard();
      DrawUserBoard();
@@ -519,7 +528,7 @@ void MyApp::DrawBoard() {
 
 
 void MyApp::DrawHitOrMissUser(char character) {
-    const Color color = Color::black();
+    const Color color = Color::white();
     const cinder::vec2 center = getWindowCenter();
     const cinder::ivec2 size = {500, 50};
     std::string print(1, character);
@@ -535,7 +544,7 @@ void MyApp::DrawHitOrMissUser(char character) {
 
 
 void MyApp::DrawHitOrMissComputer(char character) {
-     const Color color = Color::black();
+     const Color color = Color::white();
      const cinder::vec2 center = getWindowCenter();
      const cinder::ivec2 size = {500, 50};
      std::string print(1, character);
@@ -560,8 +569,21 @@ void MyApp::DrawPickingShips() {
                                       cinder::app::getWindowCenter().y + (++row) * 100});
 }
 
+void MyApp::DrawChosenShips() {
+    const cinder::vec2 center = getWindowCenter();
+    const cinder::ivec2 size = {300, 0};
+    location new_location = location(general_location_x_user_+ 115.0f, general_location_y_user_ - 20.0f);
+    locations.push_back(new_location);
+    for (int i = 0; i < locations.size(); i++) {
+        PrintImage(anchor, size, {locations.at(i).x, locations.at(i).y});
+    }
+
+}
 
 void MyApp::DrawShootingInstructions() {
+     const cinder::ivec2 size_ = {500, 50};
+
+
      std::string text = "Click where U would like to shoot";
      const cinder::vec2 center = getWindowCenter();
      const cinder::ivec2 size = {300, 0};
@@ -569,11 +591,25 @@ void MyApp::DrawShootingInstructions() {
      size_t row = 0;
      PrintText(text, color, size, {cinder::app::getWindowWidth() /2 - 180.0f,
                                       cinder::app::getWindowCenter().y + (++row) * 100});
+
+    PrintText("Ur ships are placed at: ", color, size_, {cinder::app::getWindowWidth() /2 + -194,
+                                    cinder::app::getWindowCenter().y + 250});
+
+    int col = 310.0;
+     for (int i = 0; i < game_engine_.user_player_->getShips().size(); i++) {
+         std::string x = std::to_string(game_engine_.user_player_->getShips().at(i).col);
+         std::string y = std::to_string(game_engine_.user_player_->getShips().at(i).row);
+         std::string print = "(" + x + " , " + y +")";
+         PrintText(print, color, size_, {cinder::app::getWindowWidth() /2 - col,
+                                        cinder::app::getWindowCenter().y + 300});
+         col = col - 80;
+     }
+
 }
 
 
 void MyApp::DrawWinningScreen() {
-     cinder::gl::clear(Color(1, 1, 1));
+    cinder::gl::draw(winningscreen, getWindowBounds());
      gif_winning_screen_->draw();
 }
 
