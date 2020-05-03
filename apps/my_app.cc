@@ -17,6 +17,7 @@ DECLARE_string(playerName);
 DECLARE_int32(width);
 DECLARE_int32(height);
 DECLARE_int32(amount_of_lives);
+DECLARE_bool(is_easy_player_strategy);
 
 namespace myapp {
 using cinder::app::KeyEvent;
@@ -49,7 +50,8 @@ MyApp::MyApp() :
         is_user_attacked_{false},
         shooting_state_{Shooting::kNoOneAtttacked},
         hit_or_not_computer_{'A'},
-        hit_or_not_user_{'B'} { }
+        hit_or_not_user_{'B'},
+        is_easy_player_strategy_{FLAGS_is_easy_player_strategy} { }
 
 void MyApp::setup() {
     background = cinder::gl::Texture2d::create(loadImage(loadAsset("darkoceanbackground.jpg")));
@@ -59,6 +61,8 @@ void MyApp::setup() {
     missle = cinder::gl::Texture2d::create(loadImage(loadAsset("missle_.png")));
     winningscreen = cinder::gl::Texture2d::create(loadImage(loadAsset("ws.jpg")));
     anchor = cinder::gl::Texture2d::create(loadImage(loadAsset("anchor.png")));
+    losingscreen = cinder::gl::Texture2d::create(loadImage(loadAsset("losing.png")));
+    gif_losing_screen_ = cinder::ciAnimatedGif::create(loadAsset("ssss.gif"));
 }
 
 
@@ -88,6 +92,11 @@ void MyApp::update() {
              draw();
              int computer_shot_col = game_engine_.FindRandomRowOrCol(0);
              int computer_shot_row = game_engine_.FindRandomRowOrCol(1);
+
+             if (is_easy_player_strategy_) {
+                 computer_shot_col = computer_x;
+                 computer_shot_row = computer_y;
+             }
              hit_or_not_computer_ = false;
              game_engine_.user_player_->Attacked(computer_shot_col, computer_shot_row); // user attacked by computer player shots
              shooting_state_ = Shooting::kUserAttacked; // user attacked
@@ -140,6 +149,12 @@ void MyApp::draw() {
         has_someone_won = true;
         update();
         DrawWinningScreen();
+    }
+
+    if (state_ == GameState::kComputerWinner) {
+        has_someone_won = true;
+        update();
+        DrawLosingScreen();
     }
 }
 
@@ -325,11 +340,11 @@ void MyApp::GatheringYLocationUser(int row) {
             }
             for (int j = 670; j <= 685; j++) {
                 if (row == 5) {
-                    general_location_y_user_ = 667;
+                    general_location_y_user_ = 676;
                 }
                 if (j == mouse_y_) {
                     user_y = 5;
-                    general_location_y_user_ = 667;
+                    general_location_y_user_ = 676;
                 }
             }
             for (int j = 700; j <= 715; j++) {
@@ -611,6 +626,11 @@ void MyApp::DrawShootingInstructions() {
 void MyApp::DrawWinningScreen() {
     cinder::gl::draw(winningscreen, getWindowBounds());
      gif_winning_screen_->draw();
+}
+
+void MyApp::DrawLosingScreen() {
+    cinder::gl::draw(losingscreen, getWindowBounds());
+    gif_losing_screen_->draw();
 }
 
 

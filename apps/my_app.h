@@ -14,6 +14,7 @@ namespace myapp {
 class MyApp : public cinder::app::App {
 public:
     MyApp();
+    //static bool something = true;
 
 private:
 
@@ -51,6 +52,10 @@ private:
 
     cinder::gl::Texture2dRef winningscreen;
 
+    cinder::gl::Texture2dRef losingscreen;
+
+    cinder::gl::Texture2dRef endingscreen;
+
     cinder::gl::Texture2dRef ship;
 
     cinder::gl::Texture2dRef missle;
@@ -58,6 +63,8 @@ private:
     cinder::gl::Texture2dRef anchor;
     // winning fid
     cinder::ciAnimatedGifRef gif_winning_screen_;
+
+    cinder::ciAnimatedGifRef gif_losing_screen_;
 
     // mouse down event
     void mouseDown( cinder::app::MouseEvent event );
@@ -80,6 +87,7 @@ private:
     void DrawUserBoard();
     void DrawHitOrMissUser(char character);
     void DrawChosenShips();
+    void DrawLosingScreen();
 
     // cinder already implemented methods
     void setup() override;
@@ -114,6 +122,7 @@ private:
     bool is_computer_attacked_;
     bool is_user_attacked_;
     bool has_someone_won;
+    bool is_easy_player_strategy_;
 
     // x  or o for computer/ user
     char hit_or_not_computer_;

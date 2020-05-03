@@ -3,6 +3,7 @@
 //
 
 #include "board.h"
+#include "../apps/my_app.h"
 #include <iostream>
 
 namespace mylibrary {

@@ -3,6 +3,8 @@
 //
 
 #include "menu.h"
+#include "../apps/my_app.h"
+
 namespace mylibrary {
 Menu::Menu(std::string user_name, int lives, int width, int height) :  user_name(user_name), amountOfLives(lives),
 width(width), height(height) {
