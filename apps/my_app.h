@@ -17,13 +17,6 @@ public:
     //static bool something = true;
 
 private:
-
-    //not in room(kAccusation)
-    //in room making suggestion (kSuggestion)
-    // kWaiting
-    // kDealingCards
-    //kGameOver
-    // game state enum signifying  which part of  the game we are in
     enum class GameState {
         kShooting,
         kPickingShips,
