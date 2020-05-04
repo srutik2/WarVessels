@@ -17,8 +17,7 @@ namespace mylibrary {
         // Constructor
         Player(std::string name, int lives, int width, int height);
 
-        // Destructor
-        ~Player();
+
 
         // Returns name of the player
         std::string GetName();
@@ -36,7 +35,14 @@ namespace mylibrary {
         // Prints board for current player
         void PrintBoard();
 
-        std::string printing_string_;
+        // Ship object to hold it's board position
+        struct Ship {
+            Ship(int col, int row) : col{col}, row{row} {};
+            int col;
+            int row;
+        };
+
+        const std::vector<Ship> &getShips() const;
 
     private:
         // Players name
@@ -48,19 +54,10 @@ namespace mylibrary {
         // Players personal board
         Board *grid;
 
-    public:
-        // Ship object to hold it's board position
-        struct Ship {
-            Ship(int col, int row) : col{col}, row{row} {};
-            int col;
-            int row;
-        };
-
         // Vector of all ships this player has
         std::vector<Ship> ships;
 
         // get ships vector
-        const std::vector<Ship> &getShips() const;
 
     };
 }

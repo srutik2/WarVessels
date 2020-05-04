@@ -2,17 +2,13 @@
 // Created by Sruti Kamarajugadda on 4/19/20.
 //
 
-#include "player.h"
+#include "/Users/srutikamarajugadda/Desktop/cinder/myproj/final-project-srutik2/src/player.h"
 #include <utility>
+#include <iostream>
 
 namespace mylibrary {
 Player::Player(std::string name, int lives, int width, int height) : name{std::move(name)}, lives{lives} {
     grid = new Board(width, height);
-}
-
-
-Player::~Player() {
-    delete grid;
 }
 
 
@@ -34,9 +30,17 @@ void Player::AddShip(int col, int row) {
 int Player::Attacked(int col, int row) {
     if_played = true;
     hit_or_not = false;
-    if (col > grid->GetWidth() || col < 0 || row > grid->GetHeight() || row < 0) {
-        return -1;
-    }
+        try {
+            if (col > grid->GetWidth() || col < 0 || row > grid->GetHeight() || row < 0) {
+                throw std::out_of_range("Out of range");
+            }
+        }
+        catch (const std::out_of_range& oor) {
+            std::cerr << "Out of Range error: " << oor.what() << '\n';
+            return -1;
+        }
+
+
 
     for (int i{0}; i < ships.size(); i++) {
         if (col == ships[i].col && row == ships[i].row) {

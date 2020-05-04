@@ -36,9 +36,9 @@ const char kNormalFont[] = "Papyrus";
 MyApp::MyApp() :
         width_(FLAGS_width),
         height_(FLAGS_height),
-        user_player_name_(FLAGS_playerName),
+        user_name_(FLAGS_playerName),
         amount_of_lives_(FLAGS_amount_of_lives),
-        game_engine_ {FLAGS_playerName, FLAGS_amount_of_lives, FLAGS_width, FLAGS_height},
+        game_engine_ {FLAGS_playerName, FLAGS_amount_of_lives, FLAGS_width, FLAGS_height, FLAGS_is_easy_player_strategy},
         state_{GameState::KGameNotStarted},
         is_computer_turn_{false},
         has_someone_won{false},
@@ -63,13 +63,11 @@ void MyApp::setup() {
     anchor = cinder::gl::Texture2d::create(loadImage(loadAsset("anchor.png")));
     losingscreen = cinder::gl::Texture2d::create(loadImage(loadAsset("losing.png")));
     gif_losing_screen_ = cinder::ciAnimatedGif::create(loadAsset("ssss.gif"));
+    logo = cinder::gl::Texture2d::create(loadImage(loadAsset("logo.png")));
 }
 
 
 void MyApp::update() {
-     //std::cout << "user player size: " << game_engine_.user_player_->getShips().size() << std::endl;
-     //std::cout << "computer player size: " << game_engine_.computer_player_->getShips().size() << std::endl;
-
      if (game_engine_.DeterminingWinner() == 0) {
          state_ = GameState::kComputerWinner;
      }
@@ -93,10 +91,6 @@ void MyApp::update() {
              int computer_shot_col = game_engine_.FindRandomRowOrCol(0);
              int computer_shot_row = game_engine_.FindRandomRowOrCol(1);
 
-             if (is_easy_player_strategy_) {
-                 computer_shot_col = computer_x;
-                 computer_shot_row = computer_y;
-             }
              hit_or_not_computer_ = false;
              game_engine_.user_player_->Attacked(computer_shot_col, computer_shot_row); // user attacked by computer player shots
              shooting_state_ = Shooting::kUserAttacked; // user attacked
@@ -124,6 +118,8 @@ void MyApp::draw() {
      cinder::gl::color(Color::white());
      cinder::gl::draw(background, getWindowBounds());
      DrawBoard();
+    const cinder::ivec2 size_ = {5, 5};
+     PrintImage(logo, size, {cinder::app::getWindowWidth() /2 + 305, cinder::app::getWindowHeight() / 2 - 310});
      if (state_ == GameState::KGameNotStarted) {
          cinder::gl::draw(openingscreen, getWindowBounds());
      }
@@ -511,10 +507,11 @@ void PrintBackground(const C& color, const cinder::ivec2& size) {
                                       cinder::app::getWindowWidth()/2-30.0f,
                                       cinder::app::getWindowHeight()/2-30.0f ) );
     size_t row = 0;
-    PrintText("User", Color::white(), size, {cinder::app::getWindowCenter().x + (++row) * 180,
+
+    PrintText(FLAGS_playerName, Color::white(), size, {cinder::app::getWindowCenter().x + (++row) * 200,
                                         cinder::app::getWindowCenter().y + (++row) * 30});
     PrintText("Computer", color, size, {cinder::app::getWindowWidth() /2 - 180.0f,
-                                    cinder::app::getWindowHeight() / 2-325.0f});
+                                    cinder::app::getWindowHeight() / 2-320.0f});
     PrintText("Instructions:", color, size, {cinder::app::getWindowWidth() /2 - 180.0f,
                                              cinder::app::getWindowCenter().y + (++row) * 19});
     cinder::gl::drawStrokedRect( Rectf( cinder::app::getWindowWidth()/2+30.0f,
@@ -532,10 +529,10 @@ void MyApp::DrawBoard() {
      const cinder::vec2 center = getWindowCenter();
      const cinder::ivec2 size = {500, 50};
      const Color color = Color::white();
-     PrintText("~Battleship~", color, size, center);
-     PrintImage(missle, size, {cinder::app::getWindowWidth() /2-80.0f, cinder::app::getWindowHeight() / 1.95});
-     PrintImage(missle, size, {cinder::app::getWindowWidth() /2-80.0f, cinder::app::getWindowHeight() / 2-375.0f});
-     PrintImage(missle, size, {cinder::app::getWindowWidth() /2+275.0f, cinder::app::getWindowHeight() / 1.95});
+     PrintText("~War Vessels~", color, size, center);
+     PrintImage(missle, size, {cinder::app::getWindowWidth() /2-80.0f, cinder::app::getWindowHeight() / 1.95}); // instruction
+     PrintImage(missle, size, {cinder::app::getWindowWidth() /2-80.0f, cinder::app::getWindowHeight() / 2-369.0f}); // computer
+     PrintImage(missle, size, {cinder::app::getWindowWidth() /2+300.0f, cinder::app::getWindowHeight() / 1.95});
      PrintBackground(color, size);
      DrawComputerBoard();
      DrawUserBoard();
@@ -655,7 +652,6 @@ void MyApp::DrawComputerBoard() {
         PrintText(str, color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid - 40, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
         for (int col{0}; col < width_; col++) {
             PrintImage(ship, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
-            //PrintText(board->grid[col][row], color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
             horizontal_location_in_grid = horizontal_location_in_grid - 30;
         }
         vertical_location_in_grid = vertical_location_in_grid - 30;
@@ -685,7 +681,6 @@ void MyApp::DrawUserBoard() {
         PrintText(str, color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid - 40, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
         for (int col{0}; col < width_; col++) {
             PrintImage(ship, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
-            //PrintText(board->grid[col][row], color, size, {cinder::app::getWindowWidth() /2 - horizontal_location_in_grid, cinder::app::getWindowHeight() / 2 - vertical_location_in_grid});
             horizontal_location_in_grid = horizontal_location_in_grid - 30;
         }
         vertical_location_in_grid = vertical_location_in_grid - 30;

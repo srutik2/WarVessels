@@ -30,13 +30,14 @@ namespace mylibrary {
         // Returns height_ of board
         int &GetHeight();
 
+    private:
         // Coordinates system info
         int width;
         int height;
 
         // Max grid info
-        const static int MAX_WIDTH = 8;
-        const static int MAX_HEIGHT = 8;
+        const static int MAX_WIDTH = 7;
+        const static int MAX_HEIGHT = 7;
 
         // grid itself
         std::string grid[MAX_WIDTH][MAX_HEIGHT];

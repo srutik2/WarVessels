@@ -2,8 +2,7 @@
 // Created by Sruti Kamarajugadda on 4/19/20.
 //
 
-#include "board.h"
-#include "../apps/my_app.h"
+#include "/Users/srutikamarajugadda/Desktop/cinder/myproj/final-project-srutik2/src/board.h"
 #include <iostream>
 
 namespace mylibrary {
@@ -36,14 +35,31 @@ void Board::Print() {
 }
 
 
-char Board::Hit(int width, int height) {
-    grid[width][height] = "X";
+char Board::Hit(int col, int row) {
+    try {
+        if (col > width || col < 0 || row > height || row < 0) {
+            throw std::out_of_range("Out of range");
+        }
+    }
+    catch (const std::out_of_range& oor) {
+        std::cerr << "Out of Range error: " << oor.what() << '\n';
+    }
+
+    grid[col][row] = "X";
     return 'X';
 }
 
 
-char Board::Miss(int width, int height) {
-    grid[width][height] = "O";
+char Board::Miss(int col, int row) {
+    try {
+        if (col > width || col < 0 || row > height || row < 0) {
+            throw std::out_of_range("Out of range");
+        }
+    }
+    catch (const std::out_of_range& oor) {
+        std::cerr << "Out of Range error: " << oor.what() << '\n';
+    }
+    grid[col][row] = "O";
     return 'O';
 }
 

@@ -3,8 +3,8 @@
 #ifndef FINALPROJECT_APPS_MYAPP_H_
 #define FINALPROJECT_APPS_MYAPP_H_
 
-#include "/Users/srutikamarajugadda/Desktop/cinder/myproj/final-project-srutik2/src/menu.h"
-#include <cinder/app/App.h>
+#include "../src/menu.h"
+#include "cinder/app/App.h"
 #include <cinder/gl/texture.h>
 #include "ciAnimatedGif.h"
 #include "../src/player.h"
@@ -22,7 +22,8 @@ private:
         kPickingShips,
         kUserWinner,
         kComputerWinner,
-        KGameNotStarted
+        KGameNotStarted,
+        kClosingScreen
     };
 
     //  shooting enum signifying whose turn it is when shooting
@@ -47,7 +48,7 @@ private:
 
     cinder::gl::Texture2dRef losingscreen;
 
-    cinder::gl::Texture2dRef endingscreen;
+    cinder::gl::Texture2dRef logo;
 
     cinder::gl::Texture2dRef ship;
 
@@ -89,10 +90,11 @@ private:
     void keyDown(cinder::app::KeyEvent) override;
 
     // general const variables identified through gflags in run
+    const std::string user_name_;
     const int amount_of_lives_;
     const int width_;
     const int height_;
-    const std::string user_player_name_;
+
 
     // location of computer/ user x, y location needed in shooting and ship placement game state
     int user_x;

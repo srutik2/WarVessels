@@ -7,7 +7,7 @@
 #include "player.h"
 #include "menu.h"
 #include <iostream>
-#include "../src/board.h"
+#include "board.h"
 #include <algorithm>
 #include <chrono>
 #include <string>
@@ -18,32 +18,13 @@ const char kNormalFont[] = "Papyrus";
 namespace mylibrary {
     class Menu {
     public:
-
-        bool computer_won = false;
-        bool user_won = false;
         // Constructor
-        Menu(std::string, int lives, int width, int height);
+        Menu(std::string, int lives, int width, int height, bool is_easy_player_strategy);
 
         // Destructor
         //~Menu();
 
         std::string user_name;
-
-        // Asks player for the amount of players and creates the player objects
-        void SetGameUp();
-
-        //struct of points
-        struct Points {
-            Points(int x, int y) : x{x}, y{y} {};
-
-            int x;
-            int y;
-        };
-
-        std::vector<Points> points;
-        int width;
-        int height;
-        int amountOfLives;
 
         // Players for the game
         Player *user_player_;
@@ -60,6 +41,22 @@ namespace mylibrary {
 
         //where the random computer ships are
         int FindRandomRowOrCol(int num);
+
+    private:
+        int width;
+        int height;
+        int amountOfLives;
+        bool is_easy_player_strategy;
+
+
+        //struct of points
+        struct Points {
+            Points(int x, int y) : x{x}, y{y} {};
+
+            int x;
+            int y;
+        };
+
     };
 }
 

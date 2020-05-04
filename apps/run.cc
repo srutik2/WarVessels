@@ -10,11 +10,11 @@
 using cinder::app::App;
 using cinder::app::RendererGl;
 
-DEFINE_string(playerName, "Sruti Kamarajugadda", "the name of the user");
+DEFINE_string(playerName, "Abhi", "the name of the user");
 DEFINE_int32(width, 6, "the board width_");
 DEFINE_int32(height, 6, "the board height_");
-DEFINE_int32(amount_of_lives, 4, "the amount of lives in the game");
-DEFINE_bool(is_easy_player_strategy, false, "if the user wants to play against the easy player strategy");
+DEFINE_int32(amount_of_lives, 3, "the amount of lives in the game");
+DEFINE_bool(is_easy_player_strategy, true, "if the user wants to play against the easy player strategy");
 
 
 namespace myapp {
