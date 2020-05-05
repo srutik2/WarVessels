@@ -57,6 +57,9 @@ namespace mylibrary {
             int y;
         };
 
+        std::vector<Points> temp_points_;
+        std::vector<Points> points_2;
+
     };
 }
 

@@ -3,12 +3,12 @@
 #ifndef FINALPROJECT_APPS_MYAPP_H_
 #define FINALPROJECT_APPS_MYAPP_H_
 
-#include "../src/menu.h"
+#include "../resources/menu.h"
 #include "cinder/app/App.h"
 #include <cinder/gl/texture.h>
 #include "ciAnimatedGif.h"
-#include "../src/player.h"
-#include "../src/board.h"
+#include "../resources/player.h"
+#include "../resources/board.h"
 
 namespace myapp {
 class MyApp : public cinder::app::App {

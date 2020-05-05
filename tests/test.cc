@@ -3,8 +3,8 @@
 #define CATCH_CONFIG_MAIN
 
 #include <catch2/catch.hpp>
-#include "../src/menu.h"
-#include "/Users/srutikamarajugadda/Desktop/cinder/myproj/final-project-srutik2/src/player.h"
+#include "../resources/menu.h"
+#include "../resources/player.h"
 
 TEST_CASE("Testing Player Class Get Name Function") {
     mylibrary::Player player1("Player 1", 5, 5, 5);

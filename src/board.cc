@@ -2,7 +2,7 @@
 // Created by Sruti Kamarajugadda on 4/19/20.
 //
 
-#include "/Users/srutikamarajugadda/Desktop/cinder/myproj/final-project-srutik2/src/board.h"
+#include "../resources/board.h"
 #include <iostream>
 
 namespace mylibrary {

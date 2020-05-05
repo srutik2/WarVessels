@@ -196,7 +196,6 @@ void MyApp::mouseDown( cinder::app::MouseEvent event ) {
         auto mMouseLoc = event.getPos();
         mouse_x_ = mMouseLoc.x;
         mouse_y_ = mMouseLoc.y;
-        std::cout << "Mouse location: " << mMouseLoc << std::endl;
 
         if (state_ == GameState::kPickingShips) {
             GatheringXLocationUser(0);
@@ -397,11 +396,11 @@ void MyApp::GatheringXLocationUser(int col) {
             }
             for (int j = 576; j <= 605; j++) {
                 if (col == 3) {
-                    general_location_x_user_ = 580;
+                    general_location_x_user_ = 590;
                 }
                 if (j == mouse_x_) {
                     user_x = 3;
-                    general_location_x_user_ = 580;
+                    general_location_x_user_ = 590;
                 }
             }
             for (int j = 606; j <= 635; j++) {

@@ -2,7 +2,7 @@
 // Created by Sruti Kamarajugadda on 4/19/20.
 //
 
-#include "menu.h"
+#include "../resources/menu.h"
 
 namespace mylibrary {
 Menu::Menu(std::string user_name, int lives, int width, int height, bool is_easy_player_strategy) :  user_name(user_name), amountOfLives(lives),
@@ -35,39 +35,43 @@ int Menu::FindRandomRowOrCol(int num) {
 
 
 void Menu::PlaceRandomShips(Player *player) {
-    for (int i{0}; i < player->GetLives(); i++) {
-        int col1 = rand() % width;
-        int row1 = rand() % height;
-        if (is_easy_player_strategy) {
-            mylibrary::Player::Ship *ship = new Player::Ship(col1, row1);
-            for (int i = 0; i < player->getShips().size(); i++) {
-                if (ship->col == player->getShips().at(i).col) {
-                    if (ship->row == player->getShips().at(i).row) {
+    int col = rand() % width;
+    int row = rand() % height;
+    temp_points_.emplace_back(col, row); // points vector of x and y
+    player->AddShip(col, row);
+    std::cout << "computer chosen col :" << col << std::endl;
+    std::cout << "computer chosen row :" << row << std::endl;
+
+    if (is_easy_player_strategy) {
+        for (int i = 1; i < amountOfLives; i++) {
+            int col1 = rand() % width;
+            int row1 = rand() % height;
+            for (int j = 0; j < temp_points_.size();) {
+                if  (temp_points_.at(j).x == col1) {
+                    if (temp_points_.at(j).y == row1) {
                         int col2 = rand() % width;
                         int row2 = rand() % height;
-                        mylibrary::Player::Ship *ship2 = new Player::Ship(col2, row2);
-                        if (ship2->col == player->getShips().at(i).col) {
-                            if (ship2->row == player->getShips().at(i).row) {
-                                int col3 = rand() % width;
-                                int row3 = rand() % height;
-                                player->AddShip(col3, row3);
-                                std::cout << "computer chosen col " << col3 << std::endl;
-                                std::cout << "computer chosen row " << row3 << std::endl;
-                                return;
-                            }
-                        }
-                        player->AddShip(col2, row2);
-                        std::cout << "computer chosen col " << col2 << std::endl;
-                        std::cout << "computer chosen row " << row2 << std::endl;
-                        return;
+                        col1 = col2;
+                        row1 = row2;
+                        j = 0;
+                        continue;
                     }
                 }
+                j++;
             }
+            temp_points_.emplace_back(col1, row1);
+            player->AddShip(col1, row1);
+            std::cout << "computer chosen col :" << col << std::endl;
+            std::cout << "computer chosen row :" << row << std::endl;
         }
-        std::cout << "computer chosen col " << col1 << std::endl;
-        std::cout << "computer chosen row " << row1 << std::endl;
-        player->AddShip(col1, row1);
-        return;
+    } else if (!is_easy_player_strategy) {
+        for (int i{1}; i < player->GetLives(); i++) {
+            int col = rand() % width;
+            int row = rand() % height;
+            std::cout << "computer chosen col :" << col << std::endl;
+            std::cout << "computer chosen row :" << row << std::endl;
+            player->AddShip(col, row);
+        }
     }
 }
 
