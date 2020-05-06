@@ -6,6 +6,8 @@
 #include "../resources/menu.h"
 #include "cinder/app/App.h"
 #include <cinder/gl/texture.h>
+
+#include <utility>
 #include "ciAnimatedGif.h"
 #include "../resources/player.h"
 #include "../resources/board.h"
@@ -13,20 +15,20 @@
 namespace myapp {
 class MyApp : public cinder::app::App {
 public:
+    //constructor
     MyApp();
-    //static bool something = true;
 
 private:
+    //game state enum
     enum class GameState {
         kShooting,
         kPickingShips,
         kUserWinner,
         kComputerWinner,
         KGameNotStarted,
-        kClosingScreen
     };
 
-    //  shooting enum signifying whose turn it is when shooting
+    // shooting enum signifying whose turn it is when shooting
     enum class Shooting {
         kUserAttacked,
         kComputerAttacked,
@@ -39,39 +41,25 @@ private:
     //current game state
     GameState state_ = GameState::kPickingShips;
 
-    // background
-    cinder::gl::Texture2dRef background;
-
-    cinder::gl::Texture2dRef openingscreen;
-
-    cinder::gl::Texture2dRef winningscreen;
-
-    cinder::gl::Texture2dRef losingscreen;
-
-    cinder::gl::Texture2dRef logo;
-
-    cinder::gl::Texture2dRef ship;
-
-    cinder::gl::Texture2dRef missle;
-
-    cinder::gl::Texture2dRef anchor;
-    // winning fid
+    // textures of images used throughout the game at specific character_and_location_points_
+    cinder::gl::Texture2dRef background_;
+    cinder::gl::Texture2dRef opening_screen_;
+    cinder::gl::Texture2dRef winning_screen_;
+    cinder::gl::Texture2dRef losing_screen_;
+    cinder::gl::Texture2dRef logo_;
+    cinder::gl::Texture2dRef ship_;
+    cinder::gl::Texture2dRef missile_;
+    cinder::gl::Texture2dRef anchor_;
     cinder::ciAnimatedGifRef gif_winning_screen_;
-
     cinder::ciAnimatedGifRef gif_losing_screen_;
 
-    // mouse down event
-    void mouseDown( cinder::app::MouseEvent event );
-
-    //gathering locations hits of user and computer with pixel locations
+    //gathering graphics anchor_ locations hits of user and computer with pixel graphics anchor_ locations
     void GatheringYLocationComputer();
     void GatheringXLocationUser(int col);
     void GatheringYLocationUser(int row);
     void GatheringXLocationComputer();
 
-    void PrintImage(const cinder::gl::Texture2dRef &texture, const cinder::ivec2& size, const cinder::vec2& loc);
-
-    // drew based in which game state or shooting state the game is in
+    // draws based on which game state or shooting state the game is in
     void DrawPickingShips();
     void DrawShootingInstructions();
     void DrawWinningScreen();
@@ -79,70 +67,76 @@ private:
     void DrawBoard();
     void DrawComputerBoard();
     void DrawUserBoard();
-    void DrawHitOrMissUser(char character);
+    void DrawHitOrMissUser(char c);
     void DrawChosenShips();
     void DrawLosingScreen();
+    //Prints image at a specific location_
+    void PrintImage(const cinder::gl::Texture2dRef &texture, const cinder::ivec2& size, const cinder::vec2& loc);
 
     // cinder already implemented methods
     void setup() override;
     void update() override;
     void draw() override;
     void keyDown(cinder::app::KeyEvent) override;
+    // mouse down event
+    void mouseDown( cinder::app::MouseEvent event) override;
 
     // general const variables identified through gflags in run
     const std::string user_name_;
     const int amount_of_lives_;
     const int width_;
     const int height_;
+    bool is_easy_player_strategy_;
 
 
-    // location of computer/ user x, y location needed in shooting and ship placement game state
-    int user_x;
-    int user_y;
-    int computer_x;
-    int computer_y;
-    int x;
-    int y;
+    // location_ of computer/ user x_, y_ location_ needed in shooting and ship_ placement game state
+    int user_x_;
+    int user_y_;
+    int computer_x_;
+    int computer_y_;
     int mouse_x_;
     int mouse_y_;
 
-    // the location for each x y in the background grid we laid out
+    // the location_ for each x_, y_ in the background_ grid_ we laid out
     int general_location_x_computer_;
     int general_location_x_user_;
     int general_location_y_user_;
     int general_location_y_computer_;
 
-    // boolean to ensure that the program is waiting on user and the order of events is correct
+    // booleans to ensure that the program is waiting on user and the order of events is correct
     bool is_computer_turn_;
     bool is_computer_attacked_;
     bool is_user_attacked_;
-    bool has_someone_won;
-    bool is_easy_player_strategy_;
+    bool has_someone_won_;
 
-    // x  or o for computer/ user
+    // X for hit or O for miss for computer/user
     char hit_or_not_computer_;
     char hit_or_not_user_;
+    const char x = 'X';
+    const char o = 'O';
 
-    struct location {
-        location(int x, int y) : x{x}, y{y} {};
+    //struct with only x_ and y_ location_
+    struct location_ {
+        location_(int x_, int y_) : x_{x_}, y_{y_} {};
 
-        int x;
-        int y;
+        int x_;
+        int y_;
     };
 
-    // point strut with x y location and a character
-    struct Points {
-        Points(int x, int y, std::string s) : x{x}, y{y}, s{s} {};
+    // character and location_ strut with x_ y_ location_ and a character
+    struct character_and_location_ {
+        character_and_location_(int x_, int y_, std::string s_) : x_{x_}, y_{y_}, s_{std::move(s_)} {};
 
-        int x;
-        int y;
-        std::string s;
+        int x_;
+        int y_;
+        std::string s_;
     };
 
-    std::vector<location> locations;
+    //vector of where all the graphics anchors are
+    std::vector<location_> graphics_anchor_locations_;
 
-    // vector of points
-    std::vector<Points> points;
+    //vector of where all the shots were on the graphics screen
+    std::vector<character_and_location_> character_and_location_points_;
 
     // calling game_engine in My:App constructor
     mylibrary::Menu game_engine_;

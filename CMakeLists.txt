@@ -23,12 +23,12 @@ include(ExternalProject)
 set(CMAKE_CXX_STANDARD 14)
 # This tells the compiler to not aggressively optimize and
 # to include debugging information so that the debugger
-# can properly read what's going on.
+# can properly read what's_ going on.
 # You can set a release configuration through CLion.
 set(CMAKE_BUILD_TYPE Debug)
-# Let's ensure -std=c++xx instead of -std=g++xx
+# Let's_ ensure -std=c++xx instead of -std=g++xx
 set(CMAKE_CXX_EXTENSIONS OFF)
-# Let's nicely support folders in IDE's
+# Let's_ nicely support folders in IDE's_
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Allow code coverage.
@@ -46,7 +46,7 @@ find_package(Doxygen)
 if(Doxygen_FOUND)
     add_subdirectory(docs)
 else()
-    # This is the message that some of you were seeing. It's not really an error or anything.
+    # This is the message that some of you were seeing. It's_ not really an error or anything.
     message(STATUS "Doxygen not found, not building docs")
 endif()
 

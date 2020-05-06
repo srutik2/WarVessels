@@ -11,7 +11,7 @@ function( ci_make_library )
     endif()
 
     if( NOT ARG_ASSETS_PATH )
-        # Set the default assets path to be in the standard app location (next to proj folder)
+        # Set the default assets path to be in the standard app location_ (next to proj folder)
         get_filename_component( ARG_ASSETS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../assets" ABSOLUTE )
     endif()
 
@@ -73,7 +73,7 @@ function( ci_make_library )
         unset( cinder_DIR CACHE )
     endif()
 
-    # pull in cinder's exported configuration
+    # pull in cinder's_ exported configuration
     if( NOT TARGET cinder )
         find_package( cinder REQUIRED PATHS
                 "${ARG_CINDER_PATH}/${CINDER_LIB_DIRECTORY}"
@@ -91,7 +91,7 @@ function( ci_make_library )
         set( ICON_NAME "CinderApp.icns" )
         set( ICON_PATH "${ARG_CINDER_PATH}/samples/data/${ICON_NAME}" )
 
-        # copy .icns to bundle's resources folder
+        # copy .icns to bundle's_ resources folder
         set_source_files_properties( ${ICON_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION Resources )
         # copy any other resources specified by user
         set_source_files_properties( ${ARG_RESOURCES} PROPERTIES HEADER_FILE_ONLY ON MACOSX_PACKAGE_LOCATION Resources )
@@ -143,7 +143,7 @@ function( ci_make_library )
         set_target_properties( ${ARG_LIBRARY_NAME} PROPERTIES LINK_FLAGS_DEBUG "/NODEFAULTLIB:LIBCMT /NODEFAULTLIB:LIBCPMT" )
     endif()
 
-    # Blocks are first searched relative to the sample's CMakeLists.txt file, then within cinder's blocks folder
+    # Blocks are first searched relative to the sample's_ CMakeLists.txt file, then within cinder's_ blocks folder
     foreach( block ${ARG_BLOCKS} )
         get_filename_component( blockModuleDir "${CMAKE_CURRENT_SOURCE_DIR}/${block}/proj/cmake" ABSOLUTE )
         set( blockName "" )

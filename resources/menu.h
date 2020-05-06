@@ -4,6 +4,7 @@
 
 #ifndef FINALPROJECT_MENU_H
 #define FINALPROJECT_MENU_H
+
 #include "player.h"
 #include "menu.h"
 #include <iostream>
@@ -11,20 +12,13 @@
 #include <algorithm>
 #include <chrono>
 #include <string>
-using std::string;
-//change to string
-const char kNormalFont[] = "Papyrus";
 
 namespace mylibrary {
     class Menu {
+
     public:
         // Constructor
         Menu(std::string, int lives, int width, int height, bool is_easy_player_strategy);
-
-        // Destructor
-        //~Menu();
-
-        std::string user_name;
 
         // Players for the game
         Player *user_player_;
@@ -33,33 +27,33 @@ namespace mylibrary {
         //determines if user or computer won
         int DeterminingWinner();
 
-        // Puts ships on the computers board for each live they have
+        // puts ships_ on the computers board
         void PlaceRandomShips(Player *player);
 
-        //user inputs where the ships reside
+        //user inputs where the ships_ reside
         void PlacePlayerShips(Player *player, int col, int row);
 
-        //where the random computer ships are
+        //where the random computer ships_ are
         int FindRandomRowOrCol(int num);
 
     private:
-        int width;
-        int height;
-        int amountOfLives;
-        bool is_easy_player_strategy;
+        //struct of character_and_location_points_ a ship_ can be located
+        struct location_ {
+            location_(int x_, int y_) : x_{x_}, y_{y_} {};
 
-
-        //struct of points
-        struct Points {
-            Points(int x, int y) : x{x}, y{y} {};
-
-            int x;
-            int y;
+            int x_;
+            int y_;
         };
 
-        std::vector<Points> temp_points_;
-        std::vector<Points> points_2;
+        //variables identified with each player object
+        std::string user_name_;
+        int width_;
+        int height_;
+        int amount_of_lives_;
+        bool is_easy_player_strategy_;
 
+        //vector needed for the easy player strategy to prevent ship_ stacking for the user
+        std::vector<location_> temp_points_;
     };
 }
 

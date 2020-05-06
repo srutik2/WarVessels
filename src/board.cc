@@ -6,9 +6,9 @@
 #include <iostream>
 
 namespace mylibrary {
-Board::Board(int width, int height) : width{width}, height{height} {
-    for (int col{0}; col < width; col++) {
-        for (int row{0}; row < height; row++) {
+Board::Board(int width_, int height_) : width_{width_}, height_{height_} {
+    for (int col{0}; col < width_; col++) {
+        for (int row{0}; row < height_; row++) {
             grid[col][row] = "~";
         }
     }
@@ -18,26 +18,9 @@ Board::Board(int width, int height) : width{width}, height{height} {
 Board::~Board() {}
 
 
-void Board::Print() {
-    std::cout << " ";
-    for (int numbering{0}; numbering < width; numbering++) {
-        std::cout << numbering << " ";
-    }
-    std::cout << std::endl;
-    for (int row{0}; row < height; row++) {
-        std::cout << row << " ";
-        for (int col{0}; col < width; col++) {
-            std::cout << grid[col][row] << " ";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
-}
-
-
 char Board::Hit(int col, int row) {
     try {
-        if (col > width || col < 0 || row > height || row < 0) {
+        if (col > width_ || col < 0 || row > height_ || row < 0) {
             throw std::out_of_range("Out of range");
         }
     }
@@ -52,24 +35,25 @@ char Board::Hit(int col, int row) {
 
 char Board::Miss(int col, int row) {
     try {
-        if (col > width || col < 0 || row > height || row < 0) {
+        if (col > width_ || col < 0 || row > height_ || row < 0) {
             throw std::out_of_range("Out of range");
         }
     }
     catch (const std::out_of_range& oor) {
         std::cerr << "Out of Range error: " << oor.what() << '\n';
     }
+
     grid[col][row] = "O";
     return 'O';
 }
 
 
 int &Board::GetWidth() {
-    return width;
+    return width_;
 }
 
 
 int &Board::GetHeight() {
-    return height;
+    return height_;
 }
 }
